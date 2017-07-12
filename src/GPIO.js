@@ -21,5 +21,10 @@ exports.writePinImpl = function writePinImpl (pin, val) {
 };
 
 exports.listenImpl = function listenImpl (pin, f) {
+  rpio.open(pin, rpio.INPUT, rpio.PULL_DOWN);
   rpio.poll(pin, f);
+};
+
+exports.sleepImpl = function sleepImpl (n) {
+  rpio.msleep(n);
 };

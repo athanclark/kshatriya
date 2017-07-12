@@ -3,6 +3,11 @@
 var $foreign = require("./foreign");
 var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Uncurried = require("../Control.Monad.Eff.Uncurried");
+var Control_Semigroupoid = require("../Control.Semigroupoid");
+var Data_Boolean = require("../Data.Boolean");
+var Data_Eq = require("../Data.Eq");
+var Data_Generic = require("../Data.Generic");
+var Data_Maybe = require("../Data.Maybe");
 var Prelude = require("../Prelude");
 var GPIO4 = (function () {
     function GPIO4() {
@@ -175,13 +180,14 @@ var toPin = function (v) {
     if (v instanceof GPIO27) {
         return 13;
     };
-    throw new Error("Failed pattern match at GPIO line 43, column 9 - line 63, column 1: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at GPIO line 50, column 9 - line 69, column 1: " + [ v.constructor.name ]);
 };
 var write = function (pin) {
     return function (val) {
         return Control_Monad_Eff_Uncurried.runEffFn2($foreign.writePinImpl)(toPin(pin))(val);
     };
 };
+var sleep = Control_Monad_Eff_Uncurried.runEffFn1($foreign.sleepImpl);
 var read = function (pin) {
     return Control_Monad_Eff_Uncurried.runEffFn1($foreign.readPinImpl)(toPin(pin));
 };
@@ -193,11 +199,231 @@ var openWrite = function (pin) {
 var openRead = function (pin) {
     return Control_Monad_Eff_Uncurried.runEffFn1($foreign.openReadImpl)(toPin(pin));
 };
+var genericGPIOPin = new Data_Generic.Generic(function (v) {
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO4" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO4.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO5" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO5.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO6" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO6.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO12" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO12.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO13" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO13.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO16" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO16.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO17" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO17.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO18" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO18.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO19" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO19.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO20" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO20.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO21" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO21.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO22" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO22.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO23" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO23.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO24" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO24.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO25" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO25.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO26" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO26.value);
+    };
+    if (v instanceof Data_Generic.SProd && (v.value0 === "GPIO.GPIO27" && v.value1.length === 0)) {
+        return new Data_Maybe.Just(GPIO27.value);
+    };
+    return Data_Maybe.Nothing.value;
+}, function ($dollarq) {
+    return new Data_Generic.SigProd("GPIO.GPIOPin", [ {
+        sigConstructor: "GPIO.GPIO4", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO5", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO6", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO12", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO13", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO16", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO17", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO18", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO19", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO20", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO21", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO22", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO23", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO24", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO25", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO26", 
+        sigValues: [  ]
+    }, {
+        sigConstructor: "GPIO.GPIO27", 
+        sigValues: [  ]
+    } ]);
+}, function (v) {
+    if (v instanceof GPIO4) {
+        return new Data_Generic.SProd("GPIO.GPIO4", [  ]);
+    };
+    if (v instanceof GPIO5) {
+        return new Data_Generic.SProd("GPIO.GPIO5", [  ]);
+    };
+    if (v instanceof GPIO6) {
+        return new Data_Generic.SProd("GPIO.GPIO6", [  ]);
+    };
+    if (v instanceof GPIO12) {
+        return new Data_Generic.SProd("GPIO.GPIO12", [  ]);
+    };
+    if (v instanceof GPIO13) {
+        return new Data_Generic.SProd("GPIO.GPIO13", [  ]);
+    };
+    if (v instanceof GPIO16) {
+        return new Data_Generic.SProd("GPIO.GPIO16", [  ]);
+    };
+    if (v instanceof GPIO17) {
+        return new Data_Generic.SProd("GPIO.GPIO17", [  ]);
+    };
+    if (v instanceof GPIO18) {
+        return new Data_Generic.SProd("GPIO.GPIO18", [  ]);
+    };
+    if (v instanceof GPIO19) {
+        return new Data_Generic.SProd("GPIO.GPIO19", [  ]);
+    };
+    if (v instanceof GPIO20) {
+        return new Data_Generic.SProd("GPIO.GPIO20", [  ]);
+    };
+    if (v instanceof GPIO21) {
+        return new Data_Generic.SProd("GPIO.GPIO21", [  ]);
+    };
+    if (v instanceof GPIO22) {
+        return new Data_Generic.SProd("GPIO.GPIO22", [  ]);
+    };
+    if (v instanceof GPIO23) {
+        return new Data_Generic.SProd("GPIO.GPIO23", [  ]);
+    };
+    if (v instanceof GPIO24) {
+        return new Data_Generic.SProd("GPIO.GPIO24", [  ]);
+    };
+    if (v instanceof GPIO25) {
+        return new Data_Generic.SProd("GPIO.GPIO25", [  ]);
+    };
+    if (v instanceof GPIO26) {
+        return new Data_Generic.SProd("GPIO.GPIO26", [  ]);
+    };
+    if (v instanceof GPIO27) {
+        return new Data_Generic.SProd("GPIO.GPIO27", [  ]);
+    };
+    throw new Error("Failed pattern match at GPIO line 40, column 1 - line 40, column 50: " + [ v.constructor.name ]);
+});
+var fromPin = function (pin) {
+    if (pin === 7) {
+        return GPIO4.value;
+    };
+    if (pin === 29) {
+        return GPIO5.value;
+    };
+    if (pin === 31) {
+        return GPIO6.value;
+    };
+    if (pin === 32) {
+        return GPIO12.value;
+    };
+    if (pin === 33) {
+        return GPIO13.value;
+    };
+    if (pin === 36) {
+        return GPIO16.value;
+    };
+    if (pin === 11) {
+        return GPIO17.value;
+    };
+    if (pin === 12) {
+        return GPIO18.value;
+    };
+    if (pin === 35) {
+        return GPIO19.value;
+    };
+    if (pin === 38) {
+        return GPIO20.value;
+    };
+    if (pin === 40) {
+        return GPIO21.value;
+    };
+    if (pin === 15) {
+        return GPIO22.value;
+    };
+    if (pin === 16) {
+        return GPIO23.value;
+    };
+    if (pin === 18) {
+        return GPIO24.value;
+    };
+    if (pin === 22) {
+        return GPIO25.value;
+    };
+    if (pin === 37) {
+        return GPIO26.value;
+    };
+    if (pin === 13) {
+        return GPIO27.value;
+    };
+    if (Data_Boolean.otherwise) {
+        return GPIO27.value;
+    };
+    throw new Error("Failed pattern match at GPIO line 70, column 1 - line 88, column 23: " + [ pin.constructor.name ]);
+};
 var listen = function (pin) {
     return function (f) {
-        return Control_Monad_Eff_Uncurried.runEffFn2($foreign.listenImpl)(toPin(pin))(Control_Monad_Eff_Uncurried.mkEffFn1(f));
+        return Control_Monad_Eff_Uncurried.runEffFn2($foreign.listenImpl)(toPin(pin))(Control_Monad_Eff_Uncurried.mkEffFn1(function ($41) {
+            return f(fromPin($41));
+        }));
     };
 };
+var eqGPIOPin = new Data_Eq.Eq(Data_Generic.gEq(genericGPIOPin));
 module.exports = {
     GPIO4: GPIO4, 
     GPIO5: GPIO5, 
@@ -220,5 +446,8 @@ module.exports = {
     openRead: openRead, 
     openWrite: openWrite, 
     read: read, 
-    write: write
+    sleep: sleep, 
+    write: write, 
+    genericGPIOPin: genericGPIOPin, 
+    eqGPIOPin: eqGPIOPin
 };
