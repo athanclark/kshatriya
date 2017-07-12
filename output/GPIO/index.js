@@ -175,7 +175,28 @@ var toPin = function (v) {
     if (v instanceof GPIO27) {
         return 13;
     };
-    throw new Error("Failed pattern match at GPIO line 34, column 9 - line 54, column 1: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at GPIO line 43, column 9 - line 63, column 1: " + [ v.constructor.name ]);
+};
+var write = function (pin) {
+    return function (val) {
+        return Control_Monad_Eff_Uncurried.runEffFn2($foreign.writePinImpl)(toPin(pin))(val);
+    };
+};
+var read = function (pin) {
+    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.readPinImpl)(toPin(pin));
+};
+var openWrite = function (pin) {
+    return function (val) {
+        return Control_Monad_Eff_Uncurried.runEffFn2($foreign.openWriteImpl)(toPin(pin))(val);
+    };
+};
+var openRead = function (pin) {
+    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.openReadImpl)(toPin(pin));
+};
+var listen = function (pin) {
+    return function (f) {
+        return Control_Monad_Eff_Uncurried.runEffFn2($foreign.listenImpl)(toPin(pin))(Control_Monad_Eff_Uncurried.mkEffFn1(f));
+    };
 };
 module.exports = {
     GPIO4: GPIO4, 
@@ -195,10 +216,9 @@ module.exports = {
     GPIO25: GPIO25, 
     GPIO26: GPIO26, 
     GPIO27: GPIO27, 
-    toPin: toPin, 
-    listenImpl: $foreign.listenImpl, 
-    openReadImpl: $foreign.openReadImpl, 
-    openWriteImpl: $foreign.openWriteImpl, 
-    readPinImpl: $foreign.readPinImpl, 
-    writePinImpl: $foreign.writePinImpl
+    listen: listen, 
+    openRead: openRead, 
+    openWrite: openWrite, 
+    read: read, 
+    write: write
 };

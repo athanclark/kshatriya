@@ -1,9 +1,18 @@
-module GPIO where
+module GPIO
+  ( GPIOPin (..)
+  , Pin
+  , GPIO
+  , openRead
+  , openWrite
+  , read
+  , write
+  , listen
+  ) where
 
 import Prelude
 
-import Control.Monad.Eff (kind Effect)
-import Control.Monad.Eff.Uncurried (EffFn1, EffFn2)
+import Control.Monad.Eff (Eff, kind Effect)
+import Control.Monad.Eff.Uncurried (EffFn1, EffFn2, runEffFn1, runEffFn2, mkEffFn1)
 
 
 
@@ -64,3 +73,18 @@ foreign import writePinImpl :: forall eff. EffFn2 (gpio :: GPIO | eff) Pin Boole
 foreign import listenImpl :: forall eff. EffFn2 (gpio :: GPIO | eff) Pin (EffFn1 (gpio :: GPIO | eff) Pin Unit) Unit
 
 
+
+openRead :: forall eff. GPIOPin -> Eff (gpio :: GPIO | eff) Unit
+openRead pin = runEffFn1 openReadImpl (toPin pin)
+
+openWrite :: forall eff. GPIOPin -> Boolean -> Eff (gpio :: GPIO | eff) Unit
+openWrite pin val = runEffFn2 openWriteImpl (toPin pin) val
+
+read :: forall eff. GPIOPin -> Eff (gpio :: GPIO | eff) Boolean
+read pin = runEffFn1 readPinImpl (toPin pin)
+
+write :: forall eff. GPIOPin -> Boolean -> Eff (gpio :: GPIO | eff) Unit
+write pin val = runEffFn2 writePinImpl (toPin pin) val
+
+listen :: forall eff. GPIOPin -> (Pin -> Eff (gpio :: GPIO | eff) Unit) -> Eff (gpio :: GPIO | eff) Unit
+listen pin f = runEffFn2 listenImpl (toPin pin) (mkEffFn1 f)
