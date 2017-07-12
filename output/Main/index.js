@@ -13,6 +13,7 @@ var Prelude = require("../Prelude");
 var pinCallback = function (pin) {
     if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))) {
         return function __do() {
+            Control_Monad_Eff_Console.log("??")();
             var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))();
             if (v) {
                 return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(true)();
@@ -23,7 +24,7 @@ var pinCallback = function (pin) {
     if (Data_Boolean.otherwise) {
         return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
     };
-    throw new Error("Failed pattern match at Main line 26, column 1 - line 32, column 22: " + [ pin.constructor.name ]);
+    throw new Error("Failed pattern match at Main line 30, column 1 - line 37, column 22: " + [ pin.constructor.name ]);
 };
 var main = function __do() {
     Control_Monad_Eff_Console.log("Hello sailor!")();

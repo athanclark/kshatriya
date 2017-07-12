@@ -22,9 +22,14 @@ main = do
   loop
 
 
-pinCallback :: forall eff. GPIOPin -> Eff (gpio :: GPIO | eff) Unit
+pinCallback :: forall eff
+             . GPIOPin
+            -> Eff ( gpio :: GPIO
+                   , console :: CONSOLE
+                   | eff) Unit
 pinCallback pin
   | pin == toGPIOPin LoSig = do
+      log "??"
       on <- read (toGPIOPin LoSig)
       if on
         then write (toGPIOPin Lo) true
