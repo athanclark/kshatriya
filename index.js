@@ -24,6 +24,7 @@ var PS = {};
   "use strict";
   var Control_Monad_Eff = PS["Control.Monad.Eff"];
   var Control_Monad_Eff_Console = PS["Control.Monad.Eff.Console"];
+  var GPIO = PS["GPIO"];
   var Prelude = PS["Prelude"];        
   var main = Control_Monad_Eff_Console.log("Hello sailor!");
   exports["main"] = main;
