@@ -2,7 +2,7 @@
   "name": "kshatriya",
   "version": "0.0.0",
   "description": "",
-  "main": "output/Main/index.js",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/athanclark/kshatriya/issues"
   },
-  "homepage": "https://github.com/athanclark/kshatriya#readme"
+  "homepage": "https://github.com/athanclark/kshatriya#readme",
+  "dependencies": {
+    "rpio": "^0.9.17"
+  }
 }
