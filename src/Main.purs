@@ -3,7 +3,7 @@ module Main where
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
 import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
-import Server (SERVER, assignHandlers)
+import Server (SERVER, engageServer)
 import WebSocket (websocket)
 
 import Data.Maybe (Maybe (..))
@@ -53,7 +53,7 @@ main = do
   log "Readable GPIO Pins Ready"
 
   -- Statefully start express server
-  assignHandlers websocket
+  engageServer 3000 (log "server started") websocket
 
   log "Kshatriya Ready"
 

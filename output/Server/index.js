@@ -4,6 +4,7 @@ var $foreign = require("./foreign");
 var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Uncurried = require("../Control.Monad.Eff.Uncurried");
 var Control_Semigroupoid = require("../Control.Semigroupoid");
+var Data_Function = require("../Data.Function");
 var Prelude = require("../Prelude");
 var socketToImpl = function (v) {
     return {
@@ -21,11 +22,15 @@ var socketFromImpl = function (v) {
         send: Control_Monad_Eff_Uncurried.runEffFn1(v.send)
     };
 };
-var assignHandlers = function (f) {
-    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignHandlersImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($10) {
-        return f(socketFromImpl($10));
-    }));
+var engageServer = function (p) {
+    return function (f) {
+        return function (w) {
+            return Control_Monad_Eff_Uncurried.runEffFn3($foreign.engageServerImpl)(p)(f)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($10) {
+                return w(socketFromImpl($10));
+            }));
+        };
+    };
 };
 module.exports = {
-    assignHandlers: assignHandlers
+    engageServer: engageServer
 };

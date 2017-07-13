@@ -32753,8 +32753,6 @@ var PS = {};
   var ws = new WebSocket('ws://localhost:3000');
 
 
-  console.log('socket...', socket);
-
   exports.onImpl = function (f) {
     console.log('listening',f);
     ws.on('message',function(msg) {

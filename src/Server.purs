@@ -1,13 +1,13 @@
 module Server
   ( SERVER
   , Socket
-  , assignHandlers
+  , engageServer
   ) where
 
 import Prelude
 
 import Control.Monad.Eff (Eff, kind Effect)
-import Control.Monad.Eff.Uncurried (EffFn1, EffFn2, runEffFn1, mkEffFn1, runEffFn2, mkEffFn2)
+import Control.Monad.Eff.Uncurried (EffFn1, EffFn3, runEffFn1, mkEffFn1, runEffFn3, mkEffFn2)
 
 
 foreign import data SERVER :: Effect
@@ -18,7 +18,7 @@ type SocketImpl eff =
   }
 
 
-foreign import assignHandlersImpl :: forall eff. EffFn1 (server :: SERVER | eff) (EffFn1 (server :: SERVER | eff) (SocketImpl eff) Unit) Unit
+foreign import engageServerImpl :: forall eff. EffFn3 (server :: SERVER | eff) Int (Eff (server :: SERVER | eff) Unit) (EffFn1 (server :: SERVER | eff) (SocketImpl eff) Unit) Unit
 
 
 
@@ -40,7 +40,9 @@ socketFromImpl {on,send} =
   }
 
 
-assignHandlers :: forall eff
-                . (Socket eff -> Eff (server :: SERVER | eff) Unit)
-               -> Eff (server :: SERVER | eff) Unit
-assignHandlers f = runEffFn1 assignHandlersImpl (mkEffFn1 (f <<< socketFromImpl))
+engageServer :: forall eff
+              . Int
+             -> Eff (server :: SERVER | eff) Unit
+             -> (Socket eff -> Eff (server :: SERVER | eff) Unit)
+             -> Eff (server :: SERVER | eff) Unit
+engageServer p f w = runEffFn3 engageServerImpl p f (mkEffFn1 $ w <<< socketFromImpl)

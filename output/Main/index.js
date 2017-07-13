@@ -182,7 +182,7 @@ var main = function __do() {
     listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
     listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
     Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
-    Server.assignHandlers(WebSocket.websocket)();
+    Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.websocket)();
     return Control_Monad_Eff_Console.log("Kshatriya Ready")();
 };
 module.exports = {
