@@ -8,7 +8,7 @@ var Server = require("../Server");
 var websocket = function (v) {
     return function __do() {
         Control_Monad_Eff_Console.log("connected!")();
-        return v.emit("foo")("ayooo")();
+        return v.send("ayooo")();
     };
 };
 module.exports = {

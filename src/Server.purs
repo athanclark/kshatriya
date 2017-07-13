@@ -19,8 +19,8 @@ type ResponseImpl eff =
   }
 
 type SocketImpl eff =
-  { on :: EffFn2 (server :: SERVER | eff) String (EffFn1 (server :: SERVER | eff) String Unit) Unit
-  , emit :: EffFn2 (server :: SERVER | eff) String String Unit
+  { on :: EffFn1 (server :: SERVER | eff) (EffFn1 (server :: SERVER | eff) String Unit) Unit
+  , send :: EffFn1 (server :: SERVER | eff) String Unit
   }
 
 
@@ -45,20 +45,20 @@ responseFromImpl {sendFile} = {sendFile : runEffFn1 sendFile}
 
 
 type Socket eff =
-  { on :: String -> (String -> Eff (server :: SERVER | eff) Unit) -> Eff (server :: SERVER | eff) Unit
-  , emit :: String -> String -> Eff (server :: SERVER | eff) Unit
+  { on :: (String -> Eff (server :: SERVER | eff) Unit) -> Eff (server :: SERVER | eff) Unit
+  , send :: String -> Eff (server :: SERVER | eff) Unit
   }
 
 socketToImpl :: forall eff. Socket eff -> SocketImpl eff
-socketToImpl {on,emit} =
-  { on : mkEffFn2 (\c f -> on c (runEffFn1 f))
-  , emit : mkEffFn2 emit
+socketToImpl {on,send} =
+  { on : mkEffFn1 (on <<< runEffFn1)
+  , send : mkEffFn1 send
   }
 
 socketFromImpl :: forall eff. SocketImpl eff -> Socket eff
-socketFromImpl {on,emit} =
-  { on : \c f -> runEffFn2 on c (mkEffFn1 f)
-  , emit : runEffFn2 emit
+socketFromImpl {on,send} =
+  { on : runEffFn1 on <<< mkEffFn1
+  , send : runEffFn1 send
   }
 
 

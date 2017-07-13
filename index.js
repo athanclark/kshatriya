@@ -1483,7 +1483,10 @@ var PS = {};
 
   var app = require('express')();
   var http = require('http').Server(app);
-  var io = require('socket.io')(http);
+  var WebSocket =require("ws"); 
+
+
+  var wss = new WebSocket.Server({port: 8080});
 
 
   exports.assignHomeHandler = function assignHttpHandler () {
@@ -1500,7 +1503,14 @@ var PS = {};
 
 
   exports.assignSocketHandlerImpl = function assignSocketHandlerImpl (f) {
-    io.on('connection', f);
+    wss.on('connection', function connectionImpl (ws) {
+      f({
+        on : function(f) {
+          ws.on('message', f);
+        },
+        send : ws.send
+      });
+    });
   };
 
 
@@ -1518,12 +1528,10 @@ var PS = {};
   var Prelude = PS["Prelude"];
   var socketFromImpl = function (v) {
       return {
-          on: function (c) {
-              return function (f) {
-                  return Control_Monad_Eff_Uncurried.runEffFn2(v.on)(c)(Control_Monad_Eff_Uncurried.mkEffFn1(f));
-              };
+          on: function ($15) {
+              return Control_Monad_Eff_Uncurried.runEffFn1(v.on)(Control_Monad_Eff_Uncurried.mkEffFn1($15));
           }, 
-          emit: Control_Monad_Eff_Uncurried.runEffFn2(v.emit)
+          send: Control_Monad_Eff_Uncurried.runEffFn1(v.send)
       };
   };
   var engageServer = function (p) {
@@ -1532,8 +1540,8 @@ var PS = {};
       };
   };
   var assignSocketHandler = function (f) {
-      return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($14) {
-          return f(socketFromImpl($14));
+      return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($16) {
+          return f(socketFromImpl($16));
       }));
   };
   exports["assignSocketHandler"] = assignSocketHandler;
@@ -1551,7 +1559,7 @@ var PS = {};
   var websocket = function (v) {
       return function __do() {
           Control_Monad_Eff_Console.log("connected!")();
-          return v.emit("foo")("ayooo")();
+          return v.send("ayooo")();
       };
   };
   exports["websocket"] = websocket;

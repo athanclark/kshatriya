@@ -2,7 +2,11 @@
 
 var app = require('express')();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
+
+var WebSocket = require('ws');
+
+
+var wss = new WebSocket.Server({port: 8080});
 
 
 exports.assignHomeHandler = function assignHttpHandler () {
@@ -19,7 +23,14 @@ exports.assignHomeHandler = function assignHttpHandler () {
 
 
 exports.assignSocketHandlerImpl = function assignSocketHandlerImpl (f) {
-  io.on('connection', f);
+  wss.on('connection', function connectionImpl (ws) {
+    f({
+      on : function(f) {
+        ws.on('message', f);
+      },
+      send : ws.send
+    });
+  });
 };
 
 

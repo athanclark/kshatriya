@@ -7,22 +7,18 @@ var Control_Semigroupoid = require("../Control.Semigroupoid");
 var Prelude = require("../Prelude");
 var socketToImpl = function (v) {
     return {
-        on: Control_Monad_Eff_Uncurried.mkEffFn2(function (c) {
-            return function (f) {
-                return v.on(c)(Control_Monad_Eff_Uncurried.runEffFn1(f));
-            };
+        on: Control_Monad_Eff_Uncurried.mkEffFn1(function ($14) {
+            return v.on(Control_Monad_Eff_Uncurried.runEffFn1($14));
         }), 
-        emit: Control_Monad_Eff_Uncurried.mkEffFn2(v.emit)
+        send: Control_Monad_Eff_Uncurried.mkEffFn1(v.send)
     };
 };
 var socketFromImpl = function (v) {
     return {
-        on: function (c) {
-            return function (f) {
-                return Control_Monad_Eff_Uncurried.runEffFn2(v.on)(c)(Control_Monad_Eff_Uncurried.mkEffFn1(f));
-            };
+        on: function ($15) {
+            return Control_Monad_Eff_Uncurried.runEffFn1(v.on)(Control_Monad_Eff_Uncurried.mkEffFn1($15));
         }, 
-        emit: Control_Monad_Eff_Uncurried.runEffFn2(v.emit)
+        send: Control_Monad_Eff_Uncurried.runEffFn1(v.send)
     };
 };
 var responseToImpl = function (v) {
@@ -41,8 +37,8 @@ var engageServer = function (p) {
     };
 };
 var assignSocketHandler = function (f) {
-    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($14) {
-        return f(socketFromImpl($14));
+    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($16) {
+        return f(socketFromImpl($16));
     }));
 };
 module.exports = {

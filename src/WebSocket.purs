@@ -13,6 +13,6 @@ websocket :: forall eff
           -> Eff ( server :: SERVER
                  , console :: CONSOLE
                  | eff) Unit
-websocket {on,emit} = do
+websocket {on,send} = do
   log "connected!"
-  emit "foo" "ayooo"
+  send "ayooo"
