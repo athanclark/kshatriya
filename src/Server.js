@@ -22,4 +22,7 @@ exports.assignSocketHandlerImpl = function assignSocketHandlerImpl (f) {
   io.on('connection', f);
 };
 
-exports.engageServerImpl = http.listen;
+
+exports.engageServerImpl = function engageServerImpl (port, f) {
+  http.listen(port, f);
+};
