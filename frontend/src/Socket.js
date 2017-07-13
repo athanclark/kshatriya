@@ -1,7 +1,7 @@
 "use strict";
 
 
-var socket = require('socket.io-client');
+var socket = require('socket.io-client')('http://localhost');
 
 console.log('socket...', socket);
 
