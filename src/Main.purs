@@ -59,8 +59,6 @@ main = do
 
   log "Kshatriya Ready"
 
-  sleep 10000
-
 
 
 type State =

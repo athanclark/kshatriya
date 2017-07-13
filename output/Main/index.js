@@ -151,7 +151,7 @@ var pinCallback = function (stateRef) {
         if (Data_Boolean.otherwise) {
             return Control_Monad_Eff_Console.log("!?!");
         };
-        throw new Error("Failed pattern match at Main line 89, column 1 - line 152, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
+        throw new Error("Failed pattern match at Main line 87, column 1 - line 150, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
     };
 };
 var initialState = {
@@ -185,8 +185,7 @@ var main = function __do() {
     Server.assignHomeHandler();
     Server.assignSocketHandler(WebSocket.websocket)();
     Server.engageServer(3000)(Control_Monad_Eff_Console.log("UI Comm Server started"))();
-    Control_Monad_Eff_Console.log("Kshatriya Ready")();
-    return GPIO.sleep(10000)();
+    return Control_Monad_Eff_Console.log("Kshatriya Ready")();
 };
 module.exports = {
     initialState: initialState, 
