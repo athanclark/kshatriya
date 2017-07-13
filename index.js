@@ -1524,27 +1524,37 @@ var PS = {};
                   if (v) {
                       if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
                           var v2 = Control_Monad_Eff_Ref.newRef(false)();
-                          var v3 = Control_Monad_Eff_Timer.setInterval(100)(function __do() {
+                          var v3 = Control_Monad_Eff_Timer.setInterval(300)(function __do() {
                               var v3 = Control_Monad_Eff_Ref.readRef(v2)();
                               Control_Monad_Eff_Ref.modifyRef(v2)(Data_HeytingAlgebra.not(Data_HeytingAlgebra.heytingAlgebraBoolean))();
                               GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(v3)();
                               return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v3)();
                           })();
                           return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                              var $28 = {};
-                              for (var $29 in v4) {
-                                  if ({}.hasOwnProperty.call(v4, $29)) {
-                                      $28[$29] = v4[$29];
+                              var $30 = {};
+                              for (var $31 in v4) {
+                                  if ({}.hasOwnProperty.call(v4, $31)) {
+                                      $30[$31] = v4[$31];
                                   };
                               };
-                              $28.leftBlinker = new Data_Maybe.Just(v3);
-                              return $28;
+                              $30.leftBlinker = new Data_Maybe.Just(v3);
+                              return $30;
                           })();
                       };
                       return Data_Unit.unit;
                   };
                   if (v1.leftBlinker instanceof Data_Maybe.Just) {
                       Control_Monad_Eff_Timer.clearInterval(v1.leftBlinker.value0)();
+                      Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
+                          var $34 = {};
+                          for (var $35 in v2) {
+                              if ({}.hasOwnProperty.call(v2, $35)) {
+                                  $34[$35] = v2[$35];
+                              };
+                          };
+                          $34.leftBlinker = Data_Maybe.Nothing.value;
+                          return $34;
+                      })();
                       GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(false)();
                       return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1.braking)();
                   };
@@ -1559,27 +1569,37 @@ var PS = {};
                   if (v) {
                       if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
                           var v2 = Control_Monad_Eff_Ref.newRef(false)();
-                          var v3 = Control_Monad_Eff_Timer.setInterval(100)(function __do() {
+                          var v3 = Control_Monad_Eff_Timer.setInterval(300)(function __do() {
                               var v3 = Control_Monad_Eff_Ref.readRef(v2)();
                               Control_Monad_Eff_Ref.modifyRef(v2)(Data_HeytingAlgebra.not(Data_HeytingAlgebra.heytingAlgebraBoolean))();
                               GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(v3)();
                               return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v3)();
                           })();
                           return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                              var $42 = {};
-                              for (var $43 in v4) {
-                                  if ({}.hasOwnProperty.call(v4, $43)) {
-                                      $42[$43] = v4[$43];
+                              var $47 = {};
+                              for (var $48 in v4) {
+                                  if ({}.hasOwnProperty.call(v4, $48)) {
+                                      $47[$48] = v4[$48];
                                   };
                               };
-                              $42.rightBlinker = new Data_Maybe.Just(v3);
-                              return $42;
+                              $47.rightBlinker = new Data_Maybe.Just(v3);
+                              return $47;
                           })();
                       };
                       return Data_Unit.unit;
                   };
                   if (v1.rightBlinker instanceof Data_Maybe.Just) {
                       Control_Monad_Eff_Timer.clearInterval(v1.rightBlinker.value0)();
+                      Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
+                          var $51 = {};
+                          for (var $52 in v2) {
+                              if ({}.hasOwnProperty.call(v2, $52)) {
+                                  $51[$52] = v2[$52];
+                              };
+                          };
+                          $51.rightBlinker = Data_Maybe.Nothing.value;
+                          return $51;
+                      })();
                       GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
                       return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1.braking)();
                   };
@@ -1591,14 +1611,14 @@ var PS = {};
                   var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
                   Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                   Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
-                      var $50 = {};
-                      for (var $51 in v1) {
-                          if ({}.hasOwnProperty.call(v1, $51)) {
-                              $50[$51] = v1[$51];
+                      var $58 = {};
+                      for (var $59 in v1) {
+                          if ({}.hasOwnProperty.call(v1, $59)) {
+                              $58[$59] = v1[$59];
                           };
                       };
-                      $50.braking = v;
-                      return $50;
+                      $58.braking = v;
+                      return $58;
                   })();
                   var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
                   (function () {
@@ -1616,7 +1636,7 @@ var PS = {};
           if (Data_Boolean.otherwise) {
               return Control_Monad_Eff_Console.log("!?!");
           };
-          throw new Error("Failed pattern match at Main line 64, column 1 - line 125, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 64, column 1 - line 127, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
       };
   };
   var initialState = {

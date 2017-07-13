@@ -76,7 +76,7 @@ pinCallback stateRef pin
         then case leftBlinker of
                Nothing -> do
                  switcherRef <- newRef false
-                 id <- setInterval 100 $ do
+                 id <- setInterval 300 $ do
                    x <- readRef switcherRef
                    modifyRef switcherRef not
                    write (toGPIOPin TurnL) x
@@ -86,6 +86,7 @@ pinCallback stateRef pin
         else case leftBlinker of
                Just id -> do
                  clearInterval id
+                 modifyRef stateRef $ _ {leftBlinker = Nothing}
                  write (toGPIOPin TurnL) false
                  write (toGPIOPin BrakeL) braking
                _ -> pure unit
@@ -97,7 +98,7 @@ pinCallback stateRef pin
         then case rightBlinker of
                Nothing -> do
                  switcherRef <- newRef false
-                 id <- setInterval 100 $ do
+                 id <- setInterval 300 $ do
                    x <- readRef switcherRef
                    modifyRef switcherRef not
                    write (toGPIOPin TurnR) x
@@ -107,6 +108,7 @@ pinCallback stateRef pin
         else case rightBlinker of
                Just id -> do
                  clearInterval id
+                 modifyRef stateRef $ _ {rightBlinker = Nothing}
                  write (toGPIOPin TurnR) false
                  write (toGPIOPin BrakeR) braking
                _ -> pure unit
