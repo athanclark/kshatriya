@@ -2,8 +2,8 @@ module Main where
 
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
-import Kshatriya (toGPIOPin, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
-import Server (SERVER, assignHttpHandler, engageServer)
+import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
+import Server (SERVER, assignHomeHandler, engageServer)
 
 import Data.Maybe (Maybe (..))
 import Control.Monad.Eff (Eff)
@@ -12,14 +12,15 @@ import Control.Monad.Eff.Ref (REF, Ref, newRef, modifyRef, readRef)
 import Control.Monad.Eff.Timer (TIMER, setInterval, clearInterval, IntervalId)
 
 
-main :: forall e. Eff ( console :: CONSOLE
-                      , gpio    :: GPIO
-                      , ref     :: REF
-                      , timer   :: TIMER
-                      , server  :: SERVER
-                      | e) Unit
+main :: forall eff
+      . Eff ( console :: CONSOLE
+            , gpio    :: GPIO
+            , ref     :: REF
+            , timer   :: TIMER
+            , server  :: SERVER
+            | eff) Unit
 main = do
-  log "Hello sailor!"
+  log "Kshatriya starting"
 
   openWrite (toGPIOPin Lo) false
   openWrite (toGPIOPin TurnL) false
@@ -27,18 +28,34 @@ main = do
   openWrite (toGPIOPin BrakeL) false
   openWrite (toGPIOPin BrakeR) false
 
+  log "Writable GPIO Pins Ready"
+
   stateRef <- newRef initialState
-
   let f = pinCallback stateRef
+      listen' :: forall a
+               . GPIOPinAble a
+              => a -> Eff ( server  :: SERVER
+                          , gpio    :: GPIO
+                          , ref     :: REF
+                          , timer   :: TIMER
+                          , console :: CONSOLE
+                          | eff) Unit
+      listen' x = do
+        listen (toGPIOPin x) f
+        f (toGPIOPin x)
 
-  listen (toGPIOPin LoSig) f
-  listen (toGPIOPin TurnSigL) f
-  listen (toGPIOPin TurnSigR) f
-  listen (toGPIOPin BrakeSig) f
+  listen' LoSig
+  listen' TurnSigL
+  listen' TurnSigR
+  listen' BrakeSig
 
-  assignHttpHandler "/" $ \_ {sendFile} -> do
-    sendFile "./frontend/index.html"
-  engageServer 3000 $ log "Server Started"
+  log "Readable GPIO Pins Ready"
+
+  -- Statefully start express server
+  assignHomeHandler
+  engageServer 3000 $ log "UI Comm Server started"
+
+  log "Kshatriya Ready"
 
   sleep 10000
 

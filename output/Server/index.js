@@ -3,7 +3,28 @@
 var $foreign = require("./foreign");
 var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Uncurried = require("../Control.Monad.Eff.Uncurried");
+var Control_Semigroupoid = require("../Control.Semigroupoid");
 var Prelude = require("../Prelude");
+var socketToImpl = function (v) {
+    return {
+        on: Control_Monad_Eff_Uncurried.mkEffFn2(function (c) {
+            return function (f) {
+                return v.on(c)(Control_Monad_Eff_Uncurried.runEffFn1(f));
+            };
+        }), 
+        emit: Control_Monad_Eff_Uncurried.mkEffFn2(v.emit)
+    };
+};
+var socketFromImpl = function (v) {
+    return {
+        on: function (c) {
+            return function (f) {
+                return Control_Monad_Eff_Uncurried.runEffFn2(v.on)(c)(Control_Monad_Eff_Uncurried.mkEffFn1(f));
+            };
+        }, 
+        emit: Control_Monad_Eff_Uncurried.runEffFn2(v.emit)
+    };
+};
 var responseToImpl = function (v) {
     return {
         sendFile: Control_Monad_Eff_Uncurried.mkEffFn1(v.sendFile)
@@ -20,19 +41,12 @@ var engageServer = function (p) {
     };
 };
 var assignSocketHandler = function (f) {
-    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(f));
-};
-var assignHttpHandler = function (loc) {
-    return function (f) {
-        return Control_Monad_Eff_Uncurried.runEffFn2($foreign.assignHttpHandlerImpl)(loc)(Control_Monad_Eff_Uncurried.mkEffFn2(function (req) {
-            return function (resp) {
-                return f(req)(responseFromImpl(resp));
-            };
-        }));
-    };
+    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($14) {
+        return f(socketFromImpl($14));
+    }));
 };
 module.exports = {
-    assignHttpHandler: assignHttpHandler, 
     assignSocketHandler: assignSocketHandler, 
-    engageServer: engageServer
+    engageServer: engageServer, 
+    assignHomeHandler: $foreign.assignHomeHandler
 };

@@ -1,7 +1,7 @@
 module Server
   ( SERVER
   , Request, Response, Socket
-  , assignHttpHandler, assignSocketHandler, engageServer
+  , assignHomeHandler, assignSocketHandler, engageServer
   ) where
 
 import Prelude
@@ -18,12 +18,15 @@ type ResponseImpl eff =
   { sendFile :: EffFn1 (server :: SERVER | eff) String Unit
   }
 
-type SocketImpl = Unit
+type SocketImpl eff =
+  { on :: EffFn2 (server :: SERVER | eff) String (EffFn1 (server :: SERVER | eff) String Unit) Unit
+  , emit :: EffFn2 (server :: SERVER | eff) String String Unit
+  }
 
 
-foreign import assignHttpHandlerImpl :: forall eff. EffFn2 (server :: SERVER | eff) String (EffFn2 (server :: SERVER | eff) RequestImpl (ResponseImpl eff) Unit) Unit
+foreign import assignHomeHandler :: forall eff. Eff (server :: SERVER | eff) Unit
 
-foreign import assignSocketHandlerImpl :: forall eff. EffFn1 (server :: SERVER | eff) (EffFn1 (server :: SERVER | eff) SocketImpl Unit) Unit
+foreign import assignSocketHandlerImpl :: forall eff. EffFn1 (server :: SERVER | eff) (EffFn1 (server :: SERVER | eff) (SocketImpl eff) Unit) Unit
 
 foreign import engageServerImpl :: forall eff. EffFn2 (server :: SERVER | eff) Int (Eff (server :: SERVER | eff) Unit) Unit
 
@@ -41,19 +44,28 @@ responseFromImpl :: forall eff. ResponseImpl eff -> Response eff
 responseFromImpl {sendFile} = {sendFile : runEffFn1 sendFile}
 
 
-type Socket = Unit
+type Socket eff =
+  { on :: String -> (String -> Eff (server :: SERVER | eff) Unit) -> Eff (server :: SERVER | eff) Unit
+  , emit :: String -> String -> Eff (server :: SERVER | eff) Unit
+  }
 
+socketToImpl :: forall eff. Socket eff -> SocketImpl eff
+socketToImpl {on,emit} =
+  { on : mkEffFn2 (\c f -> on c (runEffFn1 f))
+  , emit : mkEffFn2 emit
+  }
 
-assignHttpHandler :: forall eff
-                   . String
-                  -> (Request -> Response eff -> Eff (server :: SERVER | eff) Unit)
-                  -> Eff (server :: SERVER | eff) Unit
-assignHttpHandler loc f = runEffFn2 assignHttpHandlerImpl loc (mkEffFn2 (\req resp -> f req (responseFromImpl resp)))
+socketFromImpl :: forall eff. SocketImpl eff -> Socket eff
+socketFromImpl {on,emit} =
+  { on : \c f -> runEffFn2 on c (mkEffFn1 f)
+  , emit : runEffFn2 emit
+  }
+
 
 assignSocketHandler :: forall eff
-                     . (Socket -> Eff (server :: SERVER | eff) Unit)
+                     . (Socket eff -> Eff (server :: SERVER | eff) Unit)
                     -> Eff (server :: SERVER | eff) Unit
-assignSocketHandler f = runEffFn1 assignSocketHandlerImpl (mkEffFn1 f)
+assignSocketHandler f = runEffFn1 assignSocketHandlerImpl (mkEffFn1 (f <<< socketFromImpl))
 
 engageServer :: forall eff
               . Int

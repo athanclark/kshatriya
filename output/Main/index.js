@@ -45,14 +45,14 @@ var pinCallback = function (stateRef) {
                             return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v3)();
                         })();
                         return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                            var $32 = {};
-                            for (var $33 in v4) {
-                                if ({}.hasOwnProperty.call(v4, $33)) {
-                                    $32[$33] = v4[$33];
+                            var $31 = {};
+                            for (var $32 in v4) {
+                                if ({}.hasOwnProperty.call(v4, $32)) {
+                                    $31[$32] = v4[$32];
                                 };
                             };
-                            $32.leftBlinker = new Data_Maybe.Just(v3);
-                            return $32;
+                            $31.leftBlinker = new Data_Maybe.Just(v3);
+                            return $31;
                         })();
                     };
                     return Data_Unit.unit;
@@ -60,14 +60,14 @@ var pinCallback = function (stateRef) {
                 if (v1.leftBlinker instanceof Data_Maybe.Just) {
                     Control_Monad_Eff_Timer.clearInterval(v1.leftBlinker.value0)();
                     Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
-                        var $36 = {};
-                        for (var $37 in v2) {
-                            if ({}.hasOwnProperty.call(v2, $37)) {
-                                $36[$37] = v2[$37];
+                        var $35 = {};
+                        for (var $36 in v2) {
+                            if ({}.hasOwnProperty.call(v2, $36)) {
+                                $35[$36] = v2[$36];
                             };
                         };
-                        $36.leftBlinker = Data_Maybe.Nothing.value;
-                        return $36;
+                        $35.leftBlinker = Data_Maybe.Nothing.value;
+                        return $35;
                     })();
                     GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(false)();
                     return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1.braking)();
@@ -90,14 +90,14 @@ var pinCallback = function (stateRef) {
                             return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v3)();
                         })();
                         return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                            var $49 = {};
-                            for (var $50 in v4) {
-                                if ({}.hasOwnProperty.call(v4, $50)) {
-                                    $49[$50] = v4[$50];
+                            var $48 = {};
+                            for (var $49 in v4) {
+                                if ({}.hasOwnProperty.call(v4, $49)) {
+                                    $48[$49] = v4[$49];
                                 };
                             };
-                            $49.rightBlinker = new Data_Maybe.Just(v3);
-                            return $49;
+                            $48.rightBlinker = new Data_Maybe.Just(v3);
+                            return $48;
                         })();
                     };
                     return Data_Unit.unit;
@@ -105,14 +105,14 @@ var pinCallback = function (stateRef) {
                 if (v1.rightBlinker instanceof Data_Maybe.Just) {
                     Control_Monad_Eff_Timer.clearInterval(v1.rightBlinker.value0)();
                     Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
-                        var $53 = {};
-                        for (var $54 in v2) {
-                            if ({}.hasOwnProperty.call(v2, $54)) {
-                                $53[$54] = v2[$54];
+                        var $52 = {};
+                        for (var $53 in v2) {
+                            if ({}.hasOwnProperty.call(v2, $53)) {
+                                $52[$53] = v2[$53];
                             };
                         };
-                        $53.rightBlinker = Data_Maybe.Nothing.value;
-                        return $53;
+                        $52.rightBlinker = Data_Maybe.Nothing.value;
+                        return $52;
                     })();
                     GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
                     return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1.braking)();
@@ -125,14 +125,14 @@ var pinCallback = function (stateRef) {
                 var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
                 Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                 Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
-                    var $60 = {};
-                    for (var $61 in v1) {
-                        if ({}.hasOwnProperty.call(v1, $61)) {
-                            $60[$61] = v1[$61];
+                    var $59 = {};
+                    for (var $60 in v1) {
+                        if ({}.hasOwnProperty.call(v1, $60)) {
+                            $59[$60] = v1[$60];
                         };
                     };
-                    $60.braking = v;
-                    return $60;
+                    $59.braking = v;
+                    return $59;
                 })();
                 var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
                 (function () {
@@ -150,7 +150,7 @@ var pinCallback = function (stateRef) {
         if (Data_Boolean.otherwise) {
             return Control_Monad_Eff_Console.log("!?!");
         };
-        throw new Error("Failed pattern match at Main line 70, column 1 - line 133, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
+        throw new Error("Failed pattern match at Main line 87, column 1 - line 150, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
     };
 };
 var initialState = {
@@ -159,24 +159,31 @@ var initialState = {
     braking: false
 };
 var main = function __do() {
-    Control_Monad_Eff_Console.log("Hello sailor!")();
+    Control_Monad_Eff_Console.log("Kshatriya starting")();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(false)();
+    Control_Monad_Eff_Console.log("Writable GPIO Pins Ready")();
     var v = Control_Monad_Eff_Ref.newRef(initialState)();
     var f = pinCallback(v);
-    GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))(f)();
-    GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))(f)();
-    GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))(f)();
-    GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))(f)();
-    Server.assignHttpHandler("/")(function (v1) {
-        return function (v2) {
-            return v2.sendFile("./frontend/index.html");
+    var listen$prime = function (dictGPIOPinAble) {
+        return function (x) {
+            return function __do() {
+                GPIO.listen(Kshatriya.toGPIOPin(dictGPIOPinAble)(x))(f)();
+                return f(Kshatriya.toGPIOPin(dictGPIOPinAble)(x))();
+            };
         };
-    })();
-    Server.engageServer(3000)(Control_Monad_Eff_Console.log("Server Started"))();
+    };
+    listen$prime(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value)();
+    listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value)();
+    listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
+    listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
+    Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
+    Server.assignHomeHandler();
+    Server.engageServer(3000)(Control_Monad_Eff_Console.log("UI Comm Server started"))();
+    Control_Monad_Eff_Console.log("Kshatriya Ready")();
     return GPIO.sleep(10000)();
 };
 module.exports = {
