@@ -64,11 +64,13 @@ pinCallback :: forall eff
 pinCallback stateRef pin
   | pin == toGPIOPin LoSig = do
       on <- read (toGPIOPin LoSig)
+      log $ "Low signal: " <> show on
       if on
         then write (toGPIOPin Lo) true
         else write (toGPIOPin Lo) false
   | pin == toGPIOPin TurnSigL = do
       on <- read (toGPIOPin TurnSigL)
+      log $ "Left signal: " <> show on
       {leftBlinker,braking} <- readRef stateRef
       if on
         then case leftBlinker of
@@ -89,6 +91,7 @@ pinCallback stateRef pin
                _ -> pure unit
   | pin == toGPIOPin TurnSigR = do
       on <- read (toGPIOPin TurnSigR)
+      log $ "Right signal: " <> show on
       {rightBlinker,braking} <- readRef stateRef
       if on
         then case rightBlinker of
@@ -109,6 +112,7 @@ pinCallback stateRef pin
                _ -> pure unit
   | pin == toGPIOPin BrakeSig = do
       on <- read (toGPIOPin BrakeSig)
+      log $ "Brake signal: " <> show on
       modifyRef stateRef $ _ {braking = on}
       {leftBlinker,rightBlinker} <- readRef stateRef
       case leftBlinker of

@@ -11,6 +11,8 @@ var Data_Eq = require("../Data.Eq");
 var Data_Function = require("../Data.Function");
 var Data_HeytingAlgebra = require("../Data.HeytingAlgebra");
 var Data_Maybe = require("../Data.Maybe");
+var Data_Semigroup = require("../Data.Semigroup");
+var Data_Show = require("../Data.Show");
 var Data_Unit = require("../Data.Unit");
 var GPIO = require("../GPIO");
 var Kshatriya = require("../Kshatriya");
@@ -20,6 +22,7 @@ var pinCallback = function (stateRef) {
         if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))) {
             return function __do() {
                 var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))();
+                Control_Monad_Eff_Console.log("Low signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                 if (v) {
                     return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(true)();
                 };
@@ -29,6 +32,7 @@ var pinCallback = function (stateRef) {
         if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))) {
             return function __do() {
                 var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))();
+                Control_Monad_Eff_Console.log("Left signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                 var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
                 if (v) {
                     if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
@@ -63,6 +67,7 @@ var pinCallback = function (stateRef) {
         if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))) {
             return function __do() {
                 var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))();
+                Control_Monad_Eff_Console.log("Right signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                 var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
                 if (v) {
                     if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
@@ -97,6 +102,7 @@ var pinCallback = function (stateRef) {
         if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))) {
             return function __do() {
                 var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
+                Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                 Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
                     var $50 = {};
                     for (var $51 in v1) {
@@ -123,7 +129,7 @@ var pinCallback = function (stateRef) {
         if (Data_Boolean.otherwise) {
             return Control_Monad_Eff_Console.log("!?!");
         };
-        throw new Error("Failed pattern match at Main line 64, column 1 - line 121, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
+        throw new Error("Failed pattern match at Main line 64, column 1 - line 125, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
     };
 };
 var initialState = {
