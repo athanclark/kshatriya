@@ -1499,7 +1499,9 @@ var PS = {};
 
 
   exports.assignHttpHandlerImpl = function assignHttpHandlerImpl (loc, f) {
-    app.get(loc,f);
+    app.get("/",function (req,resp) {
+      resp.sendFile(__dirname + "/frontend/index.html");
+    });
   };
 
 
