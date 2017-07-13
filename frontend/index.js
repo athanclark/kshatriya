@@ -1910,6 +1910,7 @@ var PS = {};
     "use strict";
   var socket =require("socket.io-client"); 
 
+  console.log('socket...', socket);
 
   exports.onImpl = function (c,f) {
     console.log('listening on',c,f);
