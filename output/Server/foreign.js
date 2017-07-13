@@ -17,8 +17,7 @@ exports.engageServerImpl = function engageServerImpl (port, onServe, websocket) 
     // resp.sendFile(__dirname + "/frontend/index.js");
   });
 
-  var handle = http.listen(port, onServe);
-  var wss = new WebSocket.Server({server: handle});
+  var wss = new WebSocket.Server({server: app});
 
   wss.on("connection", function (ws) {
     websocket({
@@ -28,4 +27,6 @@ exports.engageServerImpl = function engageServerImpl (port, onServe, websocket) 
       send : ws.send
     });
   });
+
+  var handle = http.listen(port, onServe);
 };

@@ -1511,8 +1511,7 @@ var PS = {};
       // resp.sendFile(__dirname + "/frontend/index.js");
     });
 
-    var handle = http.listen(port, onServe);
-    var wss = new WebSocket.Server({server: handle});
+    var wss = new WebSocket.Server({server: app});
 
     wss.on("connection", function (ws) {
       websocket({
@@ -1522,6 +1521,8 @@ var PS = {};
         send : ws.send
       });
     });
+
+    var handle = http.listen(port, onServe);
   };
 })(PS["Server"] = PS["Server"] || {});
 (function(exports) {
