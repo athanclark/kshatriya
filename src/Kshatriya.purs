@@ -23,6 +23,9 @@ data TurnSig
 
 data BrakeSig = BrakeSig
 
+data WheelSig = WheelSig
+
+
 
 class GPIOPinAble a where
   toGPIOPin :: a -> GPIOPin
@@ -49,3 +52,11 @@ instance turnSigGPIOPinAble :: GPIOPinAble TurnSig where
 
 instance brakeSigGPIOPinAble :: GPIOPinAble BrakeSig where
   toGPIOPin BrakeSig = GPIO19
+
+instance wheelSigGPIOPinAble :: GPIOPinAble WheelSig where
+  toGPIOPin WheelSig = GPIO16
+
+
+
+wheelRadius :: Number
+wheelRadius = 0.328 -- meters

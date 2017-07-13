@@ -2,6 +2,13 @@
 "use strict";
 var GPIO = require("../GPIO");
 var Prelude = require("../Prelude");
+var WheelSig = (function () {
+    function WheelSig() {
+
+    };
+    WheelSig.value = new WheelSig();
+    return WheelSig;
+})();
 var TurnSigL = (function () {
     function TurnSigL() {
 
@@ -68,6 +75,10 @@ var BrakeR = (function () {
 var GPIOPinAble = function (toGPIOPin) {
     this.toGPIOPin = toGPIOPin;
 };
+var wheelSigGPIOPinAble = new GPIOPinAble(function (v) {
+    return GPIO.GPIO16.value;
+});
+var wheelRadius = 0.328;
 var turnSigGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnSigL) {
         return GPIO.GPIO26.value;
@@ -75,7 +86,7 @@ var turnSigGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnSigR) {
         return GPIO.GPIO20.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 47, column 3 - line 47, column 30: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 50, column 3 - line 50, column 30: " + [ v.constructor.name ]);
 });
 var turnGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnL) {
@@ -84,7 +95,7 @@ var turnGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnR) {
         return GPIO.GPIO18.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 35, column 3 - line 35, column 27: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 38, column 3 - line 38, column 27: " + [ v.constructor.name ]);
 });
 var toGPIOPin = function (dict) {
     return dict.toGPIOPin;
@@ -105,7 +116,7 @@ var brakeGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof BrakeR) {
         return GPIO.GPIO22.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 39, column 3 - line 39, column 28: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 42, column 3 - line 42, column 28: " + [ v.constructor.name ]);
 });
 module.exports = {
     BrakeL: BrakeL, 
@@ -117,12 +128,15 @@ module.exports = {
     TurnR: TurnR, 
     TurnSigL: TurnSigL, 
     TurnSigR: TurnSigR, 
+    WheelSig: WheelSig, 
     GPIOPinAble: GPIOPinAble, 
     toGPIOPin: toGPIOPin, 
+    wheelRadius: wheelRadius, 
     loGPIOPinAble: loGPIOPinAble, 
     turnGPIOPinAble: turnGPIOPinAble, 
     brakeGPIOPinAble: brakeGPIOPinAble, 
     loSigGPIOPinAble: loSigGPIOPinAble, 
     turnSigGPIOPinAble: turnSigGPIOPinAble, 
-    brakeSigGPIOPinAble: brakeSigGPIOPinAble
+    brakeSigGPIOPinAble: brakeSigGPIOPinAble, 
+    wheelSigGPIOPinAble: wheelSigGPIOPinAble
 };

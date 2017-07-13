@@ -3,6 +3,7 @@ module Main where
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
 import Kshatriya (toGPIOPin, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
+import Server (SERVER, assignHttpHandler, engageServer)
 
 import Data.Maybe (Maybe (..))
 import Control.Monad.Eff (Eff)
@@ -15,6 +16,7 @@ main :: forall e. Eff ( console :: CONSOLE
                       , gpio    :: GPIO
                       , ref     :: REF
                       , timer   :: TIMER
+                      , server  :: SERVER
                       | e) Unit
 main = do
   log "Hello sailor!"
@@ -33,6 +35,10 @@ main = do
   listen (toGPIOPin TurnSigL) f
   listen (toGPIOPin TurnSigR) f
   listen (toGPIOPin BrakeSig) f
+
+  assignHttpHandler "/" $ \req {sendFile} -> do
+    sendFile "./frontend/index.html"
+  engageServer 3000 $ log "Server Started"
 
   sleep 10000
 
