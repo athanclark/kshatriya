@@ -13,7 +13,15 @@ exports.openWriteImpl = function openWriteImpl (pin, def) {
 };
 
 exports.readPinImpl = function readPinImpl (pin) {
-  return rpio.read(pin);
+  var v = rpio.read(pin);
+
+  if (v === 1) {
+    return true;
+  } else if (v === 0) {
+    return false;
+  } else {
+    console.error("Strange return type from rpio.read():", v);
+  }
 };
 
 exports.writePinImpl = function writePinImpl (pin, val) {

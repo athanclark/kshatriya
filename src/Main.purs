@@ -15,11 +15,7 @@ main = do
   openWrite (toGPIOPin Lo) false
   listen (toGPIOPin LoSig) pinCallback
 
-  let loop = do
-        sleep 100
-        loop
-
-  loop
+  sleep 10000
 
 
 pinCallback :: forall eff
@@ -34,4 +30,5 @@ pinCallback pin
       if on
         then write (toGPIOPin Lo) true
         else write (toGPIOPin Lo) false
-  | otherwise = pure unit
+  | otherwise =
+      log "!?!"
