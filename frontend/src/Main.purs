@@ -1,6 +1,6 @@
 module Main where
 
-import Socket (assignSocketHandler)
+import Socket (on)
 
 import Prelude
 import Data.Maybe (Maybe (..))
@@ -79,7 +79,7 @@ mainClass =
       reactSpec = x.spec
   in  R.createClass $ reactSpec
         { getInitialState = \this -> do
-            assignSocketHandler "foo" $ \msg ->
+            on "foo" $ \msg ->
               log $ "got a message: " <> msg
             reactSpec.getInitialState this
         }
