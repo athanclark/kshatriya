@@ -28,5 +28,5 @@ exports.engageServerImpl = function engageServerImpl (port, onServe, websocket) 
     });
   });
 
-  var handle = http.listen(port, onServe);
+  http.listen(port, onServe);
 };

@@ -1522,7 +1522,7 @@ var PS = {};
       });
     });
 
-    var handle = http.listen(port, onServe);
+    http.listen(port, onServe);
   };
 })(PS["Server"] = PS["Server"] || {});
 (function(exports) {
