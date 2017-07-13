@@ -1910,7 +1910,7 @@ var PS = {};
     "use strict";
 
 
-  var socket = require('socket.io-client')('http://localhost');
+  var socket = require('socket.io-client')('http://localhost:3000');
 
   console.log('socket...', socket);
 
