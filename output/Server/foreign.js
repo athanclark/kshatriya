@@ -16,8 +16,3 @@ exports.assignHandlersImpl = function assignHandlersImpl (f) {
     });
   });
 };
-
-
-exports.engageServerImpl = function engageServerImpl (port, f) {
-  http.listen(port, f);
-};
