@@ -3,7 +3,8 @@ module Main where
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
 import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
-import Server (SERVER, assignHomeHandler, engageServer)
+import Server (SERVER, assignHomeHandler, assignSocketHandler, engageServer)
+import WebSocket (websocket)
 
 import Data.Maybe (Maybe (..))
 import Control.Monad.Eff (Eff)
@@ -53,6 +54,7 @@ main = do
 
   -- Statefully start express server
   assignHomeHandler
+  assignSocketHandler websocket
   engageServer 3000 $ log "UI Comm Server started"
 
   log "Kshatriya Ready"

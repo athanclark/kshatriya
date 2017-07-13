@@ -9,6 +9,12 @@ exports.assignHomeHandler = function assignHttpHandler () {
   app.get("/",function (req,resp) {
     resp.sendFile(__dirname + "/frontend/index.html");
   });
+  app.get("/index.js",function (req,resp) {
+    resp.sendFile(__dirname + "/frontend/index.js");
+  });
+  app.get("/style.css",function (req,resp) {
+    // resp.sendFile(__dirname + "/frontend/index.js");
+  });
 };
 
 
