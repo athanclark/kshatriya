@@ -3,7 +3,6 @@
 var $foreign = require("./foreign");
 var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Uncurried = require("../Control.Monad.Eff.Uncurried");
-var Data_Function = require("../Data.Function");
 var Prelude = require("../Prelude");
 var responseToImpl = function (v) {
     return {

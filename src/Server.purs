@@ -48,7 +48,7 @@ assignHttpHandler :: forall eff
                    . String
                   -> (Request -> Response eff -> Eff (server :: SERVER | eff) Unit)
                   -> Eff (server :: SERVER | eff) Unit
-assignHttpHandler loc f = runEffFn2 assignHttpHandlerImpl loc (mkEffFn2 $ \req resp -> f req (responseFromImpl resp))
+assignHttpHandler loc f = runEffFn2 assignHttpHandlerImpl loc (mkEffFn2 (\req resp -> f req (responseFromImpl resp)))
 
 assignSocketHandler :: forall eff
                      . (Socket -> Eff (server :: SERVER | eff) Unit)

@@ -36,7 +36,7 @@ main = do
   listen (toGPIOPin TurnSigR) f
   listen (toGPIOPin BrakeSig) f
 
-  assignHttpHandler "/" $ \req {sendFile} -> do
+  assignHttpHandler "/" $ \_ {sendFile} -> do
     sendFile "./frontend/index.html"
   engageServer 3000 $ log "Server Started"
 
