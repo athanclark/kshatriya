@@ -1,7 +1,7 @@
 module Server
   ( SERVER
   , Request, Response, Socket
-  , assignHomeHandler, assignSocketHandler, engageServer
+  , assignHandlers, engageServer
   ) where
 
 import Prelude
@@ -24,9 +24,7 @@ type SocketImpl eff =
   }
 
 
-foreign import assignHomeHandler :: forall eff. Eff (server :: SERVER | eff) Unit
-
-foreign import assignSocketHandlerImpl :: forall eff. EffFn1 (server :: SERVER | eff) (EffFn1 (server :: SERVER | eff) (SocketImpl eff) Unit) Unit
+foreign import assignHandlersImpl :: forall eff. EffFn1 (server :: SERVER | eff) (EffFn1 (server :: SERVER | eff) (SocketImpl eff) Unit) Unit
 
 foreign import engageServerImpl :: forall eff. EffFn2 (server :: SERVER | eff) Int (Eff (server :: SERVER | eff) Unit) Unit
 
@@ -62,10 +60,10 @@ socketFromImpl {on,send} =
   }
 
 
-assignSocketHandler :: forall eff
-                     . (Socket eff -> Eff (server :: SERVER | eff) Unit)
-                    -> Eff (server :: SERVER | eff) Unit
-assignSocketHandler f = runEffFn1 assignSocketHandlerImpl (mkEffFn1 (f <<< socketFromImpl))
+assignHandlers :: forall eff
+                . (Socket eff -> Eff (server :: SERVER | eff) Unit)
+               -> Eff (server :: SERVER | eff) Unit
+assignHandlers f = runEffFn1 assignHandlersImpl (mkEffFn1 (f <<< socketFromImpl))
 
 engageServer :: forall eff
               . Int

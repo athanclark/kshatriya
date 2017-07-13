@@ -151,7 +151,7 @@ var pinCallback = function (stateRef) {
         if (Data_Boolean.otherwise) {
             return Control_Monad_Eff_Console.log("!?!");
         };
-        throw new Error("Failed pattern match at Main line 87, column 1 - line 150, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
+        throw new Error("Failed pattern match at Main line 86, column 1 - line 149, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
     };
 };
 var initialState = {
@@ -182,8 +182,7 @@ var main = function __do() {
     listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
     listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
     Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
-    Server.assignHomeHandler();
-    Server.assignSocketHandler(WebSocket.websocket)();
+    Server.assignHandlers(WebSocket.websocket)();
     Server.engageServer(3000)(Control_Monad_Eff_Console.log("UI Comm Server started"))();
     return Control_Monad_Eff_Console.log("Kshatriya Ready")();
 };

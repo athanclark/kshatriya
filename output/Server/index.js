@@ -36,13 +36,12 @@ var engageServer = function (p) {
         return Control_Monad_Eff_Uncurried.runEffFn2($foreign.engageServerImpl)(p)(f);
     };
 };
-var assignSocketHandler = function (f) {
-    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignSocketHandlerImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($16) {
+var assignHandlers = function (f) {
+    return Control_Monad_Eff_Uncurried.runEffFn1($foreign.assignHandlersImpl)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($16) {
         return f(socketFromImpl($16));
     }));
 };
 module.exports = {
-    assignSocketHandler: assignSocketHandler, 
-    engageServer: engageServer, 
-    assignHomeHandler: $foreign.assignHomeHandler
+    assignHandlers: assignHandlers, 
+    engageServer: engageServer
 };

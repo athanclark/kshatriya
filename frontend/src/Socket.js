@@ -2,7 +2,7 @@
 
 
 var WebSocket = require('ws');
-var ws = new WebSocket('ws://localhost:3000');
+var ws = new WebSocket('ws://localhost:3000/ux');
 
 
 console.log('socket...', socket);

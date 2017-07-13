@@ -2,14 +2,15 @@
 
 var app = require('express')();
 var http = require('http').Server(app);
+var expressWs = require('express-ws')(app);
 
 var WebSocket = require('ws');
 
 
-var wss = new WebSocket.Server({port: 3000});
+// var wss = new WebSocket.Server({port: 3000});
 
 
-exports.assignHomeHandler = function assignHttpHandler () {
+exports.assignHandlersImpl = function assignHandlersImpl (f) {
   app.get("/",function (req,resp) {
     resp.sendFile(__dirname + "/frontend/index.html");
   });
@@ -19,14 +20,10 @@ exports.assignHomeHandler = function assignHttpHandler () {
   app.get("/style.css",function (req,resp) {
     // resp.sendFile(__dirname + "/frontend/index.js");
   });
-};
-
-
-exports.assignSocketHandlerImpl = function assignSocketHandlerImpl (f) {
-  wss.on('connection', function connectionImpl (ws) {
+  app.ws("/ux", function (ws,req) {
     f({
-      on : function(f) {
-        ws.on('message', f);
+      on : function(g) {
+        ws.on('message', g);
       },
       send : ws.send
     });
