@@ -1,17 +1,19 @@
 "use strict";
 
 
-var socket = require('socket.io-client')('http://localhost:3000');
+var WebSocket = require('ws');
+var ws = new WebSocket('ws://localhost:8080');
+
 
 console.log('socket...', socket);
 
-exports.onImpl = function (c,f) {
-  console.log('listening on',c,f);
-  socket.on(c,function(msg) {
-    console.log('got message on',c,msg);
+exports.onImpl = function (f) {
+  console.log('listening',f);
+  ws.on('message',function(msg) {
+    console.log('got message',msg);
     var result = f(msg);
-    console.log('result:',c,result);
+    console.log('result:',result);
   });
 };
 
-exports.emitImpl = socket.emit;
+exports.sendImpl = ws.send;

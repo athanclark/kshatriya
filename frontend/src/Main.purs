@@ -79,7 +79,7 @@ mainClass =
       reactSpec = x.spec
   in  R.createClass $ reactSpec
         { getInitialState = \this -> do
-            on "foo" $ \msg ->
+            on $ \msg ->
               log $ "got a message: " <> msg
             reactSpec.getInitialState this
         }

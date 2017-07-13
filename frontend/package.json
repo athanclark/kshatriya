@@ -20,8 +20,10 @@
   },
   "homepage": "https://github.com/athanclark/kshatriya#readme",
   "dependencies": {
+    "bufferutil": "^3.0.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "socket.io-client": "^2.0.3"
+    "utf-8-validate": "^3.0.3",
+    "ws": "^3.0.0"
   }
 }
