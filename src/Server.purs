@@ -31,4 +31,4 @@ engageServer :: forall eff
              -> ((String -> Eff (server :: SERVER | eff) Unit) -> Eff (server :: SERVER | eff) Unit)
              -> Eff (server :: SERVER | eff) Unit
 engageServer port onServe onMessage websocket =
-  runEffFn4 engageServerImpl port onServe (mkEffFn1 onMessage) (mkEffFn1 $ websocket <<< runEffFn1)
+  runEffFn4 engageServerImpl port onServe (mkEffFn1 onMessage) (mkEffFn1 (websocket <<< runEffFn1))

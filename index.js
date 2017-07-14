@@ -1893,10 +1893,9 @@ var PS = {};
 
     wss.on("connection", function connection (ws, req) {
       ws.on("message", onMessage);
-      var x = websocket(function (msg) {
+      websocket(function (msg) {
         ws.send(msg);
-      })();
-      console.log("wtff.....",x);
+      });
     });
 
     server.listen(port, onServe);
@@ -1909,7 +1908,6 @@ var PS = {};
   var Control_Monad_Eff = PS["Control.Monad.Eff"];
   var Control_Monad_Eff_Uncurried = PS["Control.Monad.Eff.Uncurried"];
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
-  var Data_Function = PS["Data.Function"];
   var Prelude = PS["Prelude"];        
   var engageServer = function (port) {
       return function (onServe) {
