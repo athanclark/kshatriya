@@ -1893,9 +1893,10 @@ var PS = {};
 
     wss.on("connection", function connection (ws, req) {
       ws.on("message", onMessage);
-      websocket(function (msg) {
+      var x = websocket(function (msg) {
         ws.send(msg);
       })();
+      console.log("wtff.....",x);
     });
 
     server.listen(port, onServe);
