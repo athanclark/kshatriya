@@ -7,6 +7,8 @@ import Server (SERVER, engageServer)
 import WebSocket (Outgoing (..), onReceive)
 
 import Data.Maybe (Maybe (..))
+import Data.Either (Either (..))
+import Data.Tuple (Tuple (..))
 import Data.Argonaut (encodeJson)
 import Data.Time.Duration (Milliseconds (..))
 import Data.DateTime.Instant (unInstant)
@@ -29,40 +31,52 @@ main :: forall eff
 main = do
   log "Kshatriya starting"
 
-  openWrite (toGPIOPin Lo) false
-  openWrite (toGPIOPin TurnL) false
-  openWrite (toGPIOPin TurnR) false
-  openWrite (toGPIOPin BrakeL) false
-  openWrite (toGPIOPin BrakeR) false
-  openWrite (toGPIOPin Horn) false
+  -- openWrite (toGPIOPin Lo) false
+  -- openWrite (toGPIOPin TurnL) false
+  -- openWrite (toGPIOPin TurnR) false
+  -- openWrite (toGPIOPin BrakeL) false
+  -- openWrite (toGPIOPin BrakeR) false
+  -- openWrite (toGPIOPin Horn) false
 
-  log "Writable GPIO Pins Ready"
+  -- log "Writable GPIO Pins Ready"
 
   -- Statefully start express server
   engageServer 3000 (log "server started") onReceive $ \send -> do
     stateRef <- newRef initialState
     let f = pinCallback (send <<< show <<< encodeJson) stateRef
-        listen' :: forall a
+        listen' :: forall a b c
                 . GPIOPinAble a
-                => a -> Eff ( server  :: SERVER
-                            , gpio    :: GPIO
-                            , ref     :: REF
-                            , timer   :: TIMER
-                            , console :: CONSOLE
-                            , now     :: NOW
-                            | eff) Unit
-        listen' x = do
+                => GPIOPinAble b
+                => GPIOPinAble c
+                => a
+                -> Maybe (Either b (Tuple b c))
+                -> Eff ( server  :: SERVER
+                       , gpio    :: GPIO
+                       , ref     :: REF
+                       , timer   :: TIMER
+                       , console :: CONSOLE
+                       , now     :: NOW
+                       | eff) Unit
+        listen' x meY = do
           listen (toGPIOPin x) f
+          q <- read (toGPIOPin x)
+          case meY of
+            Nothing -> pure unit
+            Just ey -> case ey of
+              Left y -> openWrite (toGPIOPin y) q
+              Right (Tuple y y') -> do
+                openWrite (toGPIOPin y) q
+                openWrite (toGPIOPin y') q
           f (toGPIOPin x)
 
-    listen' LoSig
-    listen' TurnSigL
-    listen' TurnSigR
-    listen' BrakeSig
-    listen' WheelSig
-    listen' HornSig
+    listen' LoSig $ Just $ (Left Lo :: Either Lo (Tuple Lo Lo))
+    listen' TurnSigL $ Just $ (Left TurnL :: Either Turn (Tuple Turn Turn))
+    listen' TurnSigR $ Just $ (Left TurnR :: Either Turn (Tuple Turn Turn))
+    listen' BrakeSig $ Just $ (Right (Tuple BrakeL BrakeR) :: Either BrakeHi (Tuple BrakeHi BrakeHi))
+    listen' WheelSig (Nothing :: Maybe (Either Lo (Tuple Lo Lo)))
+    listen' HornSig  $ Just $ (Left Horn :: Either Horn (Tuple Horn Horn))
 
-    log "Readable GPIO Pins Ready"
+    log "GPIO Pins Ready"
 
     log "Kshatriya Ready"
 
