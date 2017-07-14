@@ -27,7 +27,7 @@ exports.engageServerImpl = function engageServerImpl (port, onServe, onMessage, 
     ws.on("message", onMessage);
     websocket(function (msg) {
       ws.send(msg);
-    });
+    })();
   });
 
   server.listen(port, onServe);

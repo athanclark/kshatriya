@@ -1895,7 +1895,7 @@ var PS = {};
       ws.on("message", onMessage);
       websocket(function (msg) {
         ws.send(msg);
-      });
+      })();
     });
 
     server.listen(port, onServe);
