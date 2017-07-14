@@ -180,6 +180,10 @@ pinCallback dispatchWS stateRef pin
       case rightBlinker of
         Nothing -> write (toGPIOPin BrakeR) on
         _       -> pure unit
+  | pin == toGPIOPin HornSig = do
+      on <- read (toGPIOPin HornSig)
+      log $ "Horn signal: " <> show on
+      write (toGPIOPin Horn) on
   | pin == toGPIOPin WheelSig = do
       on <- read (toGPIOPin WheelSig)
       {wheel} <- readRef stateRef
