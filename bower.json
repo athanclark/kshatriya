@@ -11,7 +11,8 @@
     "purescript-console": "^3.0.0",
     "purescript-generics": "^4.0.0",
     "purescript-js-timers": "^3.0.0",
-    "purescript-refs": "^3.0.0"
+    "purescript-refs": "^3.0.0",
+    "purescript-argonaut": "^3.0.0"
   },
   "devDependencies": {
     "purescript-psci-support": "^3.0.0"

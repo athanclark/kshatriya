@@ -6,6 +6,10 @@ var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Console = require("../Control.Monad.Eff.Console");
 var Control_Monad_Eff_Ref = require("../Control.Monad.Eff.Ref");
 var Control_Monad_Eff_Timer = require("../Control.Monad.Eff.Timer");
+var Control_Semigroupoid = require("../Control.Semigroupoid");
+var Data_Argonaut = require("../Data.Argonaut");
+var Data_Argonaut_Core = require("../Data.Argonaut.Core");
+var Data_Argonaut_Encode_Class = require("../Data.Argonaut.Encode.Class");
 var Data_Boolean = require("../Data.Boolean");
 var Data_Eq = require("../Data.Eq");
 var Data_Function = require("../Data.Function");
@@ -19,145 +23,161 @@ var Kshatriya = require("../Kshatriya");
 var Prelude = require("../Prelude");
 var Server = require("../Server");
 var WebSocket = require("../WebSocket");
-var pinCallback = function (stateRef) {
-    return function (pin) {
-        if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))) {
-            return function __do() {
-                var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))();
-                Control_Monad_Eff_Console.log("Low signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
-                if (v) {
-                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(true)();
+var pinCallback = function (dispatchWS) {
+    return function (stateRef) {
+        return function (pin) {
+            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))) {
+                return function __do() {
+                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value))();
+                    Control_Monad_Eff_Console.log("Low signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
+                    GPIO.write(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(v)();
+                    Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
+                        var $25 = {};
+                        for (var $26 in v1) {
+                            if ({}.hasOwnProperty.call(v1, $26)) {
+                                $25[$26] = v1[$26];
+                            };
+                        };
+                        $25.lights = v;
+                        return $25;
+                    })();
+                    return dispatchWS(new WebSocket.ChangedLights(v))();
                 };
-                return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(false)();
             };
-        };
-        if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))) {
-            return function __do() {
-                var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))();
-                Control_Monad_Eff_Console.log("Left signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
-                var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
-                if (v) {
-                    if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
-                        var v2 = Control_Monad_Eff_Ref.newRef(false)();
-                        var v3 = Control_Monad_Eff_Timer.setInterval(300)(function __do() {
-                            var v3 = Control_Monad_Eff_Ref.readRef(v2)();
-                            Control_Monad_Eff_Ref.modifyRef(v2)(Data_HeytingAlgebra.not(Data_HeytingAlgebra.heytingAlgebraBoolean))();
-                            GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(v3)();
-                            return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v3)();
-                        })();
-                        return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                            var $31 = {};
-                            for (var $32 in v4) {
-                                if ({}.hasOwnProperty.call(v4, $32)) {
-                                    $31[$32] = v4[$32];
+            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))) {
+                return function __do() {
+                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value))();
+                    Control_Monad_Eff_Console.log("Left signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
+                    var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
+                    if (v) {
+                        if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
+                            var v2 = Control_Monad_Eff_Ref.newRef(false)();
+                            var v3 = Control_Monad_Eff_Timer.setInterval(300)(function __do() {
+                                var v3 = Control_Monad_Eff_Ref.readRef(v2)();
+                                Control_Monad_Eff_Ref.modifyRef(v2)(Data_HeytingAlgebra.not(Data_HeytingAlgebra.heytingAlgebraBoolean))();
+                                GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(v3)();
+                                return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v3)();
+                            })();
+                            Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
+                                var $35 = {};
+                                for (var $36 in v4) {
+                                    if ({}.hasOwnProperty.call(v4, $36)) {
+                                        $35[$36] = v4[$36];
+                                    };
+                                };
+                                $35.leftBlinker = new Data_Maybe.Just(v3);
+                                return $35;
+                            })();
+                            return dispatchWS(WebSocket.TurnLeft.value)();
+                        };
+                        return Data_Unit.unit;
+                    };
+                    if (v1.leftBlinker instanceof Data_Maybe.Just) {
+                        Control_Monad_Eff_Timer.clearInterval(v1.leftBlinker.value0)();
+                        Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
+                            var $39 = {};
+                            for (var $40 in v2) {
+                                if ({}.hasOwnProperty.call(v2, $40)) {
+                                    $39[$40] = v2[$40];
                                 };
                             };
-                            $31.leftBlinker = new Data_Maybe.Just(v3);
-                            return $31;
+                            $39.leftBlinker = Data_Maybe.Nothing.value;
+                            return $39;
                         })();
+                        GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(false)();
+                        GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1.braking)();
+                        return dispatchWS(WebSocket.NoTurn.value)();
                     };
                     return Data_Unit.unit;
                 };
-                if (v1.leftBlinker instanceof Data_Maybe.Just) {
-                    Control_Monad_Eff_Timer.clearInterval(v1.leftBlinker.value0)();
-                    Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
-                        var $35 = {};
-                        for (var $36 in v2) {
-                            if ({}.hasOwnProperty.call(v2, $36)) {
-                                $35[$36] = v2[$36];
+            };
+            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))) {
+                return function __do() {
+                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))();
+                    Control_Monad_Eff_Console.log("Right signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
+                    var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
+                    if (v) {
+                        if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
+                            var v2 = Control_Monad_Eff_Ref.newRef(false)();
+                            var v3 = Control_Monad_Eff_Timer.setInterval(300)(function __do() {
+                                var v3 = Control_Monad_Eff_Ref.readRef(v2)();
+                                Control_Monad_Eff_Ref.modifyRef(v2)(Data_HeytingAlgebra.not(Data_HeytingAlgebra.heytingAlgebraBoolean))();
+                                GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(v3)();
+                                return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v3)();
+                            })();
+                            Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
+                                var $52 = {};
+                                for (var $53 in v4) {
+                                    if ({}.hasOwnProperty.call(v4, $53)) {
+                                        $52[$53] = v4[$53];
+                                    };
+                                };
+                                $52.rightBlinker = new Data_Maybe.Just(v3);
+                                return $52;
+                            })();
+                            return dispatchWS(WebSocket.TurnRight.value)();
+                        };
+                        return Data_Unit.unit;
+                    };
+                    if (v1.rightBlinker instanceof Data_Maybe.Just) {
+                        Control_Monad_Eff_Timer.clearInterval(v1.rightBlinker.value0)();
+                        Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
+                            var $56 = {};
+                            for (var $57 in v2) {
+                                if ({}.hasOwnProperty.call(v2, $57)) {
+                                    $56[$57] = v2[$57];
+                                };
+                            };
+                            $56.rightBlinker = Data_Maybe.Nothing.value;
+                            return $56;
+                        })();
+                        GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
+                        GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1.braking)();
+                        return dispatchWS(WebSocket.NoTurn.value)();
+                    };
+                    return Data_Unit.unit;
+                };
+            };
+            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))) {
+                return function __do() {
+                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
+                    Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
+                    Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
+                        var $63 = {};
+                        for (var $64 in v1) {
+                            if ({}.hasOwnProperty.call(v1, $64)) {
+                                $63[$64] = v1[$64];
                             };
                         };
-                        $35.leftBlinker = Data_Maybe.Nothing.value;
-                        return $35;
+                        $63.braking = v;
+                        return $63;
                     })();
-                    GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(false)();
-                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1.braking)();
-                };
-                return Data_Unit.unit;
-            };
-        };
-        if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))) {
-            return function __do() {
-                var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value))();
-                Control_Monad_Eff_Console.log("Right signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
-                var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
-                if (v) {
+                    dispatchWS(new WebSocket.ChangedBraking(v))();
+                    var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
+                    (function () {
+                        if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
+                            return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v);
+                        };
+                        return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
+                    })()();
                     if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
-                        var v2 = Control_Monad_Eff_Ref.newRef(false)();
-                        var v3 = Control_Monad_Eff_Timer.setInterval(300)(function __do() {
-                            var v3 = Control_Monad_Eff_Ref.readRef(v2)();
-                            Control_Monad_Eff_Ref.modifyRef(v2)(Data_HeytingAlgebra.not(Data_HeytingAlgebra.heytingAlgebraBoolean))();
-                            GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(v3)();
-                            return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v3)();
-                        })();
-                        return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                            var $48 = {};
-                            for (var $49 in v4) {
-                                if ({}.hasOwnProperty.call(v4, $49)) {
-                                    $48[$49] = v4[$49];
-                                };
-                            };
-                            $48.rightBlinker = new Data_Maybe.Just(v3);
-                            return $48;
-                        })();
+                        return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v)();
                     };
                     return Data_Unit.unit;
                 };
-                if (v1.rightBlinker instanceof Data_Maybe.Just) {
-                    Control_Monad_Eff_Timer.clearInterval(v1.rightBlinker.value0)();
-                    Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
-                        var $52 = {};
-                        for (var $53 in v2) {
-                            if ({}.hasOwnProperty.call(v2, $53)) {
-                                $52[$53] = v2[$53];
-                            };
-                        };
-                        $52.rightBlinker = Data_Maybe.Nothing.value;
-                        return $52;
-                    })();
-                    GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
-                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1.braking)();
-                };
-                return Data_Unit.unit;
             };
-        };
-        if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))) {
-            return function __do() {
-                var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
-                Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
-                Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
-                    var $59 = {};
-                    for (var $60 in v1) {
-                        if ({}.hasOwnProperty.call(v1, $60)) {
-                            $59[$60] = v1[$60];
-                        };
-                    };
-                    $59.braking = v;
-                    return $59;
-                })();
-                var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
-                (function () {
-                    if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
-                        return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v);
-                    };
-                    return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
-                })()();
-                if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
-                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v)();
-                };
-                return Data_Unit.unit;
+            if (Data_Boolean.otherwise) {
+                return Control_Monad_Eff_Console.log("!?!");
             };
+            throw new Error("Failed pattern match at Main line 92, column 1 - line 160, column 11: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
         };
-        if (Data_Boolean.otherwise) {
-            return Control_Monad_Eff_Console.log("!?!");
-        };
-        throw new Error("Failed pattern match at Main line 84, column 1 - line 147, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
     };
 };
 var initialState = {
     leftBlinker: Data_Maybe.Nothing.value, 
     rightBlinker: Data_Maybe.Nothing.value, 
-    braking: false
+    braking: false, 
+    lights: false
 };
 var main = function __do() {
     Control_Monad_Eff_Console.log("Kshatriya starting")();
@@ -167,23 +187,28 @@ var main = function __do() {
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(false)();
     Control_Monad_Eff_Console.log("Writable GPIO Pins Ready")();
-    var v = Control_Monad_Eff_Ref.newRef(initialState)();
-    var f = pinCallback(v);
-    var listen$prime = function (dictGPIOPinAble) {
-        return function (x) {
-            return function __do() {
-                GPIO.listen(Kshatriya.toGPIOPin(dictGPIOPinAble)(x))(f)();
-                return f(Kshatriya.toGPIOPin(dictGPIOPinAble)(x))();
+    return Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(function (send) {
+        return function __do() {
+            var v = Control_Monad_Eff_Ref.newRef(initialState)();
+            var f = pinCallback(function ($72) {
+                return send(Data_Show.show(Data_Argonaut_Core.showJson)(Data_Argonaut_Encode_Class.encodeJson(WebSocket.encodeJsonOutgoing)($72)));
+            })(v);
+            var listen$prime = function (dictGPIOPinAble) {
+                return function (x) {
+                    return function __do() {
+                        GPIO.listen(Kshatriya.toGPIOPin(dictGPIOPinAble)(x))(f)();
+                        return f(Kshatriya.toGPIOPin(dictGPIOPinAble)(x))();
+                    };
+                };
             };
+            listen$prime(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value)();
+            listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value)();
+            listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
+            listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
+            Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
+            return Control_Monad_Eff_Console.log("Kshatriya Ready")();
         };
-    };
-    listen$prime(Kshatriya.loSigGPIOPinAble)(Kshatriya.LoSig.value)();
-    listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigL.value)();
-    listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
-    listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
-    Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
-    Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(WebSocket.websocket)();
-    return Control_Monad_Eff_Console.log("Kshatriya Ready")();
+    })();
 };
 module.exports = {
     initialState: initialState, 
