@@ -15,6 +15,8 @@ data BrakeHi
   = BrakeL
   | BrakeR
 
+data Horn = Horn
+
 data LoSig = LoSig
 
 data TurnSig
@@ -24,6 +26,8 @@ data TurnSig
 data BrakeSig = BrakeSig
 
 data WheelSig = WheelSig
+
+data HornSig = HornSig
 
 
 
@@ -42,6 +46,9 @@ instance brakeGPIOPinAble :: GPIOPinAble BrakeHi where
   toGPIOPin BrakeL = GPIO27
   toGPIOPin BrakeR = GPIO22
 
+instance hornGPIOPinAble :: GPIOPinAble Horn where
+  toGPIOPin Horn = GPIO23
+
 
 instance loSigGPIOPinAble :: GPIOPinAble LoSig where
   toGPIOPin LoSig = GPIO21
@@ -55,6 +62,9 @@ instance brakeSigGPIOPinAble :: GPIOPinAble BrakeSig where
 
 instance wheelSigGPIOPinAble :: GPIOPinAble WheelSig where
   toGPIOPin WheelSig = GPIO16
+
+instance hornSigGPIOPinAble :: GPIOPinAble HornSig where
+  toGPIOPin HornSig = GPIO13
 
 
 

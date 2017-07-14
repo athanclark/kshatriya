@@ -1941,6 +1941,20 @@ var PS = {};
       Lo.value = new Lo();
       return Lo;
   })();
+  var HornSig = (function () {
+      function HornSig() {
+
+      };
+      HornSig.value = new HornSig();
+      return HornSig;
+  })();
+  var Horn = (function () {
+      function Horn() {
+
+      };
+      Horn.value = new Horn();
+      return Horn;
+  })();
   var BrakeSig = (function () {
       function BrakeSig() {
 
@@ -1976,7 +1990,7 @@ var PS = {};
       if (v instanceof TurnSigR) {
           return GPIO.GPIO20.value;
       };
-      throw new Error("Failed pattern match at Kshatriya line 50, column 3 - line 50, column 30: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Kshatriya line 57, column 3 - line 57, column 30: " + [ v.constructor.name ]);
   });
   var turnGPIOPinAble = new GPIOPinAble(function (v) {
       if (v instanceof TurnL) {
@@ -1985,7 +1999,7 @@ var PS = {};
       if (v instanceof TurnR) {
           return GPIO.GPIO18.value;
       };
-      throw new Error("Failed pattern match at Kshatriya line 38, column 3 - line 38, column 27: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Kshatriya line 42, column 3 - line 42, column 27: " + [ v.constructor.name ]);
   });
   var toGPIOPin = function (dict) {
       return dict.toGPIOPin;
@@ -1995,6 +2009,12 @@ var PS = {};
   });
   var loGPIOPinAble = new GPIOPinAble(function (v) {
       return GPIO.GPIO4.value;
+  });
+  var hornSigGPIOPinAble = new GPIOPinAble(function (v) {
+      return GPIO.GPIO13.value;
+  });
+  var hornGPIOPinAble = new GPIOPinAble(function (v) {
+      return GPIO.GPIO23.value;
   });
   var brakeSigGPIOPinAble = new GPIOPinAble(function (v) {
       return GPIO.GPIO19.value;
@@ -2006,11 +2026,13 @@ var PS = {};
       if (v instanceof BrakeR) {
           return GPIO.GPIO22.value;
       };
-      throw new Error("Failed pattern match at Kshatriya line 42, column 3 - line 42, column 28: " + [ v.constructor.name ]);
+      throw new Error("Failed pattern match at Kshatriya line 46, column 3 - line 46, column 28: " + [ v.constructor.name ]);
   });
   exports["BrakeL"] = BrakeL;
   exports["BrakeR"] = BrakeR;
   exports["BrakeSig"] = BrakeSig;
+  exports["Horn"] = Horn;
+  exports["HornSig"] = HornSig;
   exports["Lo"] = Lo;
   exports["LoSig"] = LoSig;
   exports["TurnL"] = TurnL;
@@ -2024,10 +2046,12 @@ var PS = {};
   exports["loGPIOPinAble"] = loGPIOPinAble;
   exports["turnGPIOPinAble"] = turnGPIOPinAble;
   exports["brakeGPIOPinAble"] = brakeGPIOPinAble;
+  exports["hornGPIOPinAble"] = hornGPIOPinAble;
   exports["loSigGPIOPinAble"] = loSigGPIOPinAble;
   exports["turnSigGPIOPinAble"] = turnSigGPIOPinAble;
   exports["brakeSigGPIOPinAble"] = brakeSigGPIOPinAble;
   exports["wheelSigGPIOPinAble"] = wheelSigGPIOPinAble;
+  exports["hornSigGPIOPinAble"] = hornSigGPIOPinAble;
 })(PS["Kshatriya"] = PS["Kshatriya"] || {});
 (function(exports) {
     "use strict";              
@@ -2504,10 +2528,10 @@ var PS = {};
       GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
       GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(false)();
       GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(false)();
+      GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.hornGPIOPinAble)(Kshatriya.Horn.value))(false)();
       Control_Monad_Eff_Console.log("Writable GPIO Pins Ready")();
       return Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(function (send) {
           return function __do() {
-              Control_Monad_Eff_Console.log("?!?")();
               var v = Control_Monad_Eff_Ref.newRef(initialState)();
               var f = pinCallback(function ($114) {
                   return send(Data_Show.show(Data_Argonaut_Core.showJson)(Data_Argonaut_Encode_Class.encodeJson(WebSocket.encodeJsonOutgoing)($114)));
@@ -2525,6 +2549,7 @@ var PS = {};
               listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
               listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
               listen$prime(Kshatriya.wheelSigGPIOPinAble)(Kshatriya.WheelSig.value)();
+              listen$prime(Kshatriya.hornSigGPIOPinAble)(Kshatriya.HornSig.value)();
               Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
               return Control_Monad_Eff_Console.log("Kshatriya Ready")();
           };

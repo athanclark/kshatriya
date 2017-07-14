@@ -51,6 +51,20 @@ var Lo = (function () {
     Lo.value = new Lo();
     return Lo;
 })();
+var HornSig = (function () {
+    function HornSig() {
+
+    };
+    HornSig.value = new HornSig();
+    return HornSig;
+})();
+var Horn = (function () {
+    function Horn() {
+
+    };
+    Horn.value = new Horn();
+    return Horn;
+})();
 var BrakeSig = (function () {
     function BrakeSig() {
 
@@ -86,7 +100,7 @@ var turnSigGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnSigR) {
         return GPIO.GPIO20.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 50, column 3 - line 50, column 30: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 57, column 3 - line 57, column 30: " + [ v.constructor.name ]);
 });
 var turnGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnL) {
@@ -95,7 +109,7 @@ var turnGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnR) {
         return GPIO.GPIO18.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 38, column 3 - line 38, column 27: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 42, column 3 - line 42, column 27: " + [ v.constructor.name ]);
 });
 var toGPIOPin = function (dict) {
     return dict.toGPIOPin;
@@ -105,6 +119,12 @@ var loSigGPIOPinAble = new GPIOPinAble(function (v) {
 });
 var loGPIOPinAble = new GPIOPinAble(function (v) {
     return GPIO.GPIO4.value;
+});
+var hornSigGPIOPinAble = new GPIOPinAble(function (v) {
+    return GPIO.GPIO13.value;
+});
+var hornGPIOPinAble = new GPIOPinAble(function (v) {
+    return GPIO.GPIO23.value;
 });
 var brakeSigGPIOPinAble = new GPIOPinAble(function (v) {
     return GPIO.GPIO19.value;
@@ -116,12 +136,14 @@ var brakeGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof BrakeR) {
         return GPIO.GPIO22.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 42, column 3 - line 42, column 28: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 46, column 3 - line 46, column 28: " + [ v.constructor.name ]);
 });
 module.exports = {
     BrakeL: BrakeL, 
     BrakeR: BrakeR, 
     BrakeSig: BrakeSig, 
+    Horn: Horn, 
+    HornSig: HornSig, 
     Lo: Lo, 
     LoSig: LoSig, 
     TurnL: TurnL, 
@@ -135,8 +157,10 @@ module.exports = {
     loGPIOPinAble: loGPIOPinAble, 
     turnGPIOPinAble: turnGPIOPinAble, 
     brakeGPIOPinAble: brakeGPIOPinAble, 
+    hornGPIOPinAble: hornGPIOPinAble, 
     loSigGPIOPinAble: loSigGPIOPinAble, 
     turnSigGPIOPinAble: turnSigGPIOPinAble, 
     brakeSigGPIOPinAble: brakeSigGPIOPinAble, 
-    wheelSigGPIOPinAble: wheelSigGPIOPinAble
+    wheelSigGPIOPinAble: wheelSigGPIOPinAble, 
+    hornSigGPIOPinAble: hornSigGPIOPinAble
 };

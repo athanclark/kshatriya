@@ -2,7 +2,7 @@ module Main where
 
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
-import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius)
+import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius, Horn (..), HornSig (..))
 import Server (SERVER, engageServer)
 import WebSocket (Outgoing (..), onReceive)
 
@@ -34,13 +34,12 @@ main = do
   openWrite (toGPIOPin TurnR) false
   openWrite (toGPIOPin BrakeL) false
   openWrite (toGPIOPin BrakeR) false
+  openWrite (toGPIOPin Horn) false
 
   log "Writable GPIO Pins Ready"
 
   -- Statefully start express server
   engageServer 3000 (log "server started") onReceive $ \send -> do
-    log "?!?"
-
     stateRef <- newRef initialState
     let f = pinCallback (send <<< show <<< encodeJson) stateRef
         listen' :: forall a
@@ -61,6 +60,7 @@ main = do
     listen' TurnSigR
     listen' BrakeSig
     listen' WheelSig
+    listen' HornSig
 
     log "Readable GPIO Pins Ready"
 

@@ -310,10 +310,10 @@ var main = function __do() {
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(false)();
     GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(false)();
+    GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.hornGPIOPinAble)(Kshatriya.Horn.value))(false)();
     Control_Monad_Eff_Console.log("Writable GPIO Pins Ready")();
     return Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(function (send) {
         return function __do() {
-            Control_Monad_Eff_Console.log("?!?")();
             var v = Control_Monad_Eff_Ref.newRef(initialState)();
             var f = pinCallback(function ($114) {
                 return send(Data_Show.show(Data_Argonaut_Core.showJson)(Data_Argonaut_Encode_Class.encodeJson(WebSocket.encodeJsonOutgoing)($114)));
@@ -331,6 +331,7 @@ var main = function __do() {
             listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
             listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
             listen$prime(Kshatriya.wheelSigGPIOPinAble)(Kshatriya.WheelSig.value)();
+            listen$prime(Kshatriya.hornSigGPIOPinAble)(Kshatriya.HornSig.value)();
             Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
             return Control_Monad_Eff_Console.log("Kshatriya Ready")();
         };
