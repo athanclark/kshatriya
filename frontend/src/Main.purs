@@ -4,8 +4,12 @@ import Socket (on)
 
 import Prelude
 import Data.Maybe (Maybe (..))
+import Data.Either (Either (..))
+import Data.Argonaut (decodeJson, jsonParser, class DecodeJson, (.?))
+import Data.Generic (class Generic, gShow)
+import Control.Alternative ((<|>))
 import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Console (CONSOLE, log)
+import Control.Monad.Eff.Console (CONSOLE, log, warn)
 
 import Thermite as T
 import React as R
@@ -22,12 +26,13 @@ import Data.Foldable (traverse_)
 
 
 data Direction
-  = Left | Right
+  = LeftDir | RightDir
 
 type State =
   { speed   :: Number
   , turning :: Maybe Direction
   , braking :: Boolean
+  , lights  :: Boolean
   }
 
 initialState :: State
@@ -35,6 +40,7 @@ initialState =
   { speed   : 0.0
   , turning : Nothing
   , braking : false
+  , lights  : false
   }
 
 data Action
@@ -43,6 +49,28 @@ data Action
   | TurningRight
   | NotTurning
   | ChangedBraking Boolean
+  | ChangedLights Boolean
+
+derive instance genericAction :: Generic Action
+
+instance showAction :: Show Action where
+  show = gShow
+
+instance decodeJsonOutgoing :: DecodeJson Action where
+  decodeJson json = decodeObject <|> decodeString
+    where
+      decodeObject = do
+        o <- decodeJson json
+        (ChangedSpeed <$> o .? "speed")
+          <|> (ChangedBraking <$> o .? "braking")
+          <|> (ChangedLights <$> o .? "lights")
+      decodeString = do
+        s <- decodeJson json
+        case s of
+          _ | s == "left" -> pure TurningLeft
+            | s == "right" -> pure TurningRight
+            | s == "no" -> pure NotTurning
+            | otherwise -> Left "Not an Action"
 
 type Props = Unit
 
@@ -55,10 +83,11 @@ spec = T.simpleSpec performAction render
     performAction action _ _ = do
       void $ case action of
         ChangedSpeed s   -> T.cotransform $ _ {speed = s}
-        TurningLeft      -> T.cotransform $ _ {turning = Just Left}
-        TurningRight     -> T.cotransform $ _ {turning = Just Right}
+        TurningLeft      -> T.cotransform $ _ {turning = Just LeftDir}
+        TurningRight     -> T.cotransform $ _ {turning = Just RightDir}
         NotTurning       -> T.cotransform $ _ {turning = Nothing}
         ChangedBraking b -> T.cotransform $ _ {braking = b}
+        ChangedLights l  -> T.cotransform $ _ {lights  = l}
       pure unit
 
     render :: T.Render State Props Action
@@ -67,8 +96,8 @@ spec = T.simpleSpec performAction render
       , R.p [] [R.text $ case turning of
           Nothing -> "not turning"
           Just d -> case d of
-            Left -> "turning left"
-            Right -> "turning right"]
+            LeftDir -> "turning left"
+            RightDir -> "turning right"]
       , R.p [] [R.text $ if braking then "braking" else "not braking"]
       ]
 
@@ -79,8 +108,9 @@ mainClass =
       reactSpec = x.spec
   in  R.createClass $ reactSpec
         { getInitialState = \this -> do
-            on $ \msg ->
-              log $ "got a message: " <> msg
+            on $ \msg -> case decodeJson =<< jsonParser msg of
+              Left err -> warn $ "json decoding error: " <> err
+              Right incoming -> log $ "got a message: " <> show (incoming :: Action)
             reactSpec.getInitialState this
         }
 

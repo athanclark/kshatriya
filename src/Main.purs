@@ -2,16 +2,20 @@ module Main where
 
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
-import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
+import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius)
 import Server (SERVER, engageServer)
 import WebSocket (Outgoing (..), onReceive)
 
 import Data.Maybe (Maybe (..))
 import Data.Argonaut (encodeJson)
+import Data.Time.Duration (Milliseconds (..))
+import Data.DateTime.Instant (unInstant)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Ref (REF, Ref, newRef, modifyRef, readRef)
 import Control.Monad.Eff.Timer (TIMER, setInterval, clearInterval, IntervalId)
+import Control.Monad.Eff.Now (NOW, now)
+import Math (pi)
 
 
 main :: forall eff
@@ -20,6 +24,7 @@ main :: forall eff
             , ref     :: REF
             , timer   :: TIMER
             , server  :: SERVER
+            , now     :: NOW
             | eff) Unit
 main = do
   log "Kshatriya starting"
@@ -45,6 +50,7 @@ main = do
                             , ref     :: REF
                             , timer   :: TIMER
                             , console :: CONSOLE
+                            , now     :: NOW
                             | eff) Unit
         listen' x = do
           listen (toGPIOPin x) f
@@ -54,11 +60,16 @@ main = do
     listen' TurnSigL
     listen' TurnSigR
     listen' BrakeSig
+    listen' WheelSig
 
     log "Readable GPIO Pins Ready"
 
     log "Kshatriya Ready"
 
+
+data SensorState
+  = HitSensor
+  | LeftSensor
 
 
 type State =
@@ -66,6 +77,11 @@ type State =
   , rightBlinker :: Maybe IntervalId
   , braking      :: Boolean
   , lights       :: Boolean
+  , wheel        ::
+      { lastHit   :: Maybe Milliseconds
+      , sensor    :: SensorState
+      , lastSpeed :: Maybe Number
+      }
   }
 
 initialState :: State
@@ -74,6 +90,11 @@ initialState =
   , rightBlinker : Nothing
   , braking      : false
   , lights       : false
+  , wheel        :
+      { lastHit   : Nothing
+      , sensor    : LeftSensor
+      , lastSpeed : Nothing
+      }
   }
 
 
@@ -82,6 +103,7 @@ pinCallback :: forall eff
                                 , console :: CONSOLE
                                 , ref :: REF
                                 , timer :: TIMER
+                                , now :: NOW
                                 | eff) Unit)
             -> Ref State
             -> GPIOPin
@@ -89,6 +111,7 @@ pinCallback :: forall eff
                    , console :: CONSOLE
                    , ref     :: REF
                    , timer   :: TIMER
+                   , now     :: NOW
                    | eff) Unit
 pinCallback dispatchWS stateRef pin
   | pin == toGPIOPin LoSig = do
@@ -157,5 +180,45 @@ pinCallback dispatchWS stateRef pin
       case rightBlinker of
         Nothing -> write (toGPIOPin BrakeR) on
         _       -> pure unit
+  | pin == toGPIOPin WheelSig = do
+      on <- read (toGPIOPin WheelSig)
+      {wheel} <- readRef stateRef
+      case wheel of
+        {lastHit,sensor,lastSpeed} ->
+          if on
+            then case sensor of
+              LeftSensor -> case lastHit of
+                Nothing -> do
+                  x <- unInstant <$> now
+                  modifyRef stateRef $
+                    _ { wheel =
+                          { sensor : HitSensor
+                          , lastHit : Just x
+                          , lastSpeed : Nothing
+                          }
+                      }
+                Just last -> do
+                  x <- unInstant <$> now
+                  let Milliseconds dur = x - last
+                      circum = 2.0 * pi * wheelRadius
+                      spd = circum / dur
+                  case lastSpeed of
+                    Nothing -> modifyRef stateRef $ _ { wheel = { lastHit : Just x
+                                                                , lastSpeed : Just $ (3.0 / 4.0) * spd
+                                                                , sensor : HitSensor
+                                                                }
+                                                      }
+                    Just spd' ->
+                      let spd_ = ((3.0 / 4.0) * (spd - spd')) + spd'
+                      in  modifyRef stateRef $ _ { wheel = { lastHit : Just x
+                                                           , lastSpeed : Just spd_
+                                                           , sensor : HitSensor
+                                                           }
+                                                 }
+              HitSensor -> pure unit
+            else case sensor of
+              LeftSensor -> pure unit
+              HitSensor -> modifyRef stateRef $ \state ->
+                state { wheel = state.wheel { sensor = LeftSensor } }
   | otherwise =
       log "!?!"
