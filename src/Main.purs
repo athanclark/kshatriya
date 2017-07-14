@@ -34,6 +34,7 @@ main = do
 
   -- Statefully start express server
   engageServer 3000 (log "server started") onReceive $ \send -> do
+    log "?!?"
 
     stateRef <- newRef initialState
     let f = pinCallback (send <<< show <<< encodeJson) stateRef

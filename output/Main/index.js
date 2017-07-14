@@ -169,7 +169,7 @@ var pinCallback = function (dispatchWS) {
             if (Data_Boolean.otherwise) {
                 return Control_Monad_Eff_Console.log("!?!");
             };
-            throw new Error("Failed pattern match at Main line 92, column 1 - line 160, column 11: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
+            throw new Error("Failed pattern match at Main line 93, column 1 - line 161, column 11: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
         };
     };
 };
@@ -189,6 +189,7 @@ var main = function __do() {
     Control_Monad_Eff_Console.log("Writable GPIO Pins Ready")();
     return Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(function (send) {
         return function __do() {
+            Control_Monad_Eff_Console.log("?!?")();
             var v = Control_Monad_Eff_Ref.newRef(initialState)();
             var f = pinCallback(function ($72) {
                 return send(Data_Show.show(Data_Argonaut_Core.showJson)(Data_Argonaut_Encode_Class.encodeJson(WebSocket.encodeJsonOutgoing)($72)));
