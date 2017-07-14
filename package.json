@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/athanclark/kshatriya#readme",
   "dependencies": {
+    "cors": "^2.8.4",
     "express": "^4.15.3",
     "http": "0.0.0",
     "rpio": "^0.9.17",

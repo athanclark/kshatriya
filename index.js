@@ -413,12 +413,14 @@ var PS = {};
     };
   };
 
-  exports.runEffFn3 = function runEffFn3(fn) {
+  exports.runEffFn4 = function runEffFn4(fn) {
     return function(a) {
       return function(b) {
         return function(c) {
-          return function() {
-            return fn(a, b, c);
+          return function(d) {
+            return function() {
+              return fn(a, b, c, d);
+            };
           };
         };
       };
@@ -433,7 +435,7 @@ var PS = {};
   exports["mkEffFn1"] = $foreign.mkEffFn1;
   exports["runEffFn1"] = $foreign.runEffFn1;
   exports["runEffFn2"] = $foreign.runEffFn2;
-  exports["runEffFn3"] = $foreign.runEffFn3;
+  exports["runEffFn4"] = $foreign.runEffFn4;
 })(PS["Control.Monad.Eff.Uncurried"] = PS["Control.Monad.Eff.Uncurried"] || {});
 (function(exports) {
     "use strict";
@@ -1495,12 +1497,14 @@ var PS = {};
     "use strict";
 
   var app = require('express')();
-  var http = require('http').Server(app);
-  var WebSocket =require("ws"); 
+  var http =require("http");
+  var WebSocket =require("ws");
+  var cors =require("cors"); 
+
+  app.use(cors());
 
 
-
-  exports.engageServerImpl = function engageServerImpl (port, onServe, websocket) {
+  exports.engageServerImpl = function engageServerImpl (port, onServe, onMessage, websocket) {
     app.get("/",function (req,resp) {
       resp.sendFile(__dirname + "/frontend/index.html");
     });
@@ -1511,18 +1515,18 @@ var PS = {};
       // resp.sendFile(__dirname + "/frontend/index.js");
     });
 
-    var wss = new WebSocket.Server({server: app});
+    var server = http.createServer(app);
 
-    wss.on("connection", function (ws) {
-      websocket({
-        on : function(g) {
-          ws.on('message', g);
-        },
-        send : ws.send
+    var wss = new WebSocket.Server({server: server});
+
+    wss.on("connection", function connection (ws, req) {
+      ws.on("message", onMessage);
+      websocket(function (msg) {
+        ws.send(msg);
       });
     });
 
-    http.listen(port, onServe);
+    server.listen(port, onServe);
   };
 })(PS["Server"] = PS["Server"] || {});
 (function(exports) {
@@ -1533,21 +1537,15 @@ var PS = {};
   var Control_Monad_Eff_Uncurried = PS["Control.Monad.Eff.Uncurried"];
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
   var Data_Function = PS["Data.Function"];
-  var Prelude = PS["Prelude"];
-  var socketFromImpl = function (v) {
-      return {
-          on: function ($9) {
-              return Control_Monad_Eff_Uncurried.runEffFn1(v.on)(Control_Monad_Eff_Uncurried.mkEffFn1($9));
-          }, 
-          send: Control_Monad_Eff_Uncurried.runEffFn1(v.send)
-      };
-  };
-  var engageServer = function (p) {
-      return function (f) {
-          return function (w) {
-              return Control_Monad_Eff_Uncurried.runEffFn3($foreign.engageServerImpl)(p)(f)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($10) {
-                  return w(socketFromImpl($10));
-              }));
+  var Prelude = PS["Prelude"];        
+  var engageServer = function (port) {
+      return function (onServe) {
+          return function (onMessage) {
+              return function (websocket) {
+                  return Control_Monad_Eff_Uncurried.runEffFn4($foreign.engageServerImpl)(port)(onServe)(Control_Monad_Eff_Uncurried.mkEffFn1(onMessage))(Control_Monad_Eff_Uncurried.mkEffFn1(function ($0) {
+                      return websocket(Control_Monad_Eff_Uncurried.runEffFn1($0));
+                  }));
+              };
           };
       };
   };
@@ -1559,14 +1557,20 @@ var PS = {};
   var Control_Bind = PS["Control.Bind"];
   var Control_Monad_Eff = PS["Control.Monad.Eff"];
   var Control_Monad_Eff_Console = PS["Control.Monad.Eff.Console"];
+  var Data_Function = PS["Data.Function"];
+  var Data_Semigroup = PS["Data.Semigroup"];
   var Prelude = PS["Prelude"];
   var Server = PS["Server"];        
-  var websocket = function (v) {
+  var websocket = function (send) {
       return function __do() {
           Control_Monad_Eff_Console.log("connected!")();
-          return v.send("ayooo")();
+          return send("ayooo")();
       };
   };
+  var onReceive = function (msg) {
+      return Control_Monad_Eff_Console.log("received! " + msg);
+  };
+  exports["onReceive"] = onReceive;
   exports["websocket"] = websocket;
 })(PS["WebSocket"] = PS["WebSocket"] || {});
 (function(exports) {
@@ -1723,7 +1727,7 @@ var PS = {};
           if (Data_Boolean.otherwise) {
               return Control_Monad_Eff_Console.log("!?!");
           };
-          throw new Error("Failed pattern match at Main line 85, column 1 - line 148, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 84, column 1 - line 147, column 11: " + [ stateRef.constructor.name, pin.constructor.name ]);
       };
   };
   var initialState = {
@@ -1754,7 +1758,7 @@ var PS = {};
       listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.TurnSigR.value)();
       listen$prime(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value)();
       Control_Monad_Eff_Console.log("Readable GPIO Pins Ready")();
-      Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.websocket)();
+      Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(WebSocket.websocket)();
       return Control_Monad_Eff_Console.log("Kshatriya Ready")();
   };
   exports["initialState"] = initialState;

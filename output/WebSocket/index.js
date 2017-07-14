@@ -3,14 +3,20 @@
 var Control_Bind = require("../Control.Bind");
 var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Console = require("../Control.Monad.Eff.Console");
+var Data_Function = require("../Data.Function");
+var Data_Semigroup = require("../Data.Semigroup");
 var Prelude = require("../Prelude");
 var Server = require("../Server");
-var websocket = function (v) {
+var websocket = function (send) {
     return function __do() {
         Control_Monad_Eff_Console.log("connected!")();
-        return v.send("ayooo")();
+        return send("ayooo")();
     };
 };
+var onReceive = function (msg) {
+    return Control_Monad_Eff_Console.log("received! " + msg);
+};
 module.exports = {
+    onReceive: onReceive, 
     websocket: websocket
 };

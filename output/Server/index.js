@@ -6,28 +6,14 @@ var Control_Monad_Eff_Uncurried = require("../Control.Monad.Eff.Uncurried");
 var Control_Semigroupoid = require("../Control.Semigroupoid");
 var Data_Function = require("../Data.Function");
 var Prelude = require("../Prelude");
-var socketToImpl = function (v) {
-    return {
-        on: Control_Monad_Eff_Uncurried.mkEffFn1(function ($8) {
-            return v.on(Control_Monad_Eff_Uncurried.runEffFn1($8));
-        }), 
-        send: Control_Monad_Eff_Uncurried.mkEffFn1(v.send)
-    };
-};
-var socketFromImpl = function (v) {
-    return {
-        on: function ($9) {
-            return Control_Monad_Eff_Uncurried.runEffFn1(v.on)(Control_Monad_Eff_Uncurried.mkEffFn1($9));
-        }, 
-        send: Control_Monad_Eff_Uncurried.runEffFn1(v.send)
-    };
-};
-var engageServer = function (p) {
-    return function (f) {
-        return function (w) {
-            return Control_Monad_Eff_Uncurried.runEffFn3($foreign.engageServerImpl)(p)(f)(Control_Monad_Eff_Uncurried.mkEffFn1(function ($10) {
-                return w(socketFromImpl($10));
-            }));
+var engageServer = function (port) {
+    return function (onServe) {
+        return function (onMessage) {
+            return function (websocket) {
+                return Control_Monad_Eff_Uncurried.runEffFn4($foreign.engageServerImpl)(port)(onServe)(Control_Monad_Eff_Uncurried.mkEffFn1(onMessage))(Control_Monad_Eff_Uncurried.mkEffFn1(function ($0) {
+                    return websocket(Control_Monad_Eff_Uncurried.runEffFn1($0));
+                }));
+            };
         };
     };
 };

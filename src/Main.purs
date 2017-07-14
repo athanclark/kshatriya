@@ -4,7 +4,7 @@ import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
 import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..))
 import Server (SERVER, engageServer)
-import WebSocket (websocket)
+import WebSocket (websocket, onReceive)
 
 import Data.Maybe (Maybe (..))
 import Control.Monad.Eff (Eff)
@@ -53,7 +53,7 @@ main = do
   log "Readable GPIO Pins Ready"
 
   -- Statefully start express server
-  engageServer 3000 (log "server started") websocket
+  engageServer 3000 (log "server started") onReceive websocket
 
   log "Kshatriya Ready"
 
@@ -71,7 +71,6 @@ initialState =
   , rightBlinker : Nothing
   , braking      : false
   }
-
 
 
 pinCallback :: forall eff

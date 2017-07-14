@@ -1,17 +1,16 @@
 "use strict";
 
 
-var WebSocket = require('ws');
-var ws = new WebSocket('ws://localhost:3000');
+var socket = new WebSocket('ws://localhost:3000');
 
 
 exports.onImpl = function (f) {
   console.log('listening',f);
-  ws.on('message',function(msg) {
-    console.log('got message',msg);
-    var result = f(msg);
+  socket.onmessage = function onmessageImpl (event) {
+    console.log('got message', event);
+    var result = f(event.data);
     console.log('result:',result);
-  });
+  };
 };
 
-exports.sendImpl = ws.send;
+exports.sendImpl = socket.send;

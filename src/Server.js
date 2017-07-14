@@ -1,12 +1,14 @@
 "use strict";
 
 var app = require('express')();
-var http = require('http').Server(app);
+var http = require('http');
 var WebSocket = require('ws');
+var cors = require('cors');
+
+app.use(cors());
 
 
-
-exports.engageServerImpl = function engageServerImpl (port, onServe, websocket) {
+exports.engageServerImpl = function engageServerImpl (port, onServe, onMessage, websocket) {
   app.get("/",function (req,resp) {
     resp.sendFile(__dirname + "/frontend/index.html");
   });
@@ -17,16 +19,16 @@ exports.engageServerImpl = function engageServerImpl (port, onServe, websocket) 
     // resp.sendFile(__dirname + "/frontend/index.js");
   });
 
-  var wss = new WebSocket.Server({server: app});
+  var server = http.createServer(app);
 
-  wss.on("connection", function (ws) {
-    websocket({
-      on : function(g) {
-        ws.on('message', g);
-      },
-      send : ws.send
+  var wss = new WebSocket.Server({server: server});
+
+  wss.on("connection", function connection (ws, req) {
+    ws.on("message", onMessage);
+    websocket(function (msg) {
+      ws.send(msg);
     });
   });
 
-  http.listen(port, onServe);
+  server.listen(port, onServe);
 };
