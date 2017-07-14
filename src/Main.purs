@@ -31,15 +31,6 @@ main :: forall eff
 main = do
   log "Kshatriya starting"
 
-  -- openWrite (toGPIOPin Lo) false
-  -- openWrite (toGPIOPin TurnL) false
-  -- openWrite (toGPIOPin TurnR) false
-  -- openWrite (toGPIOPin BrakeL) false
-  -- openWrite (toGPIOPin BrakeR) false
-  -- openWrite (toGPIOPin Horn) false
-
-  -- log "Writable GPIO Pins Ready"
-
   -- Statefully start express server
   engageServer 3000 (log "server started") onReceive $ \send -> do
     stateRef <- newRef initialState

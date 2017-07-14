@@ -107,11 +107,12 @@ mainClass =
   let x@{dispatcher} = T.createReactSpec spec initialState
       reactSpec = x.spec
   in  R.createClass $ reactSpec
-        { getInitialState = \this -> do
+        { componentDidMount = \this -> do
             on $ \msg -> case decodeJson =<< jsonParser msg of
               Left err -> warn $ "json decoding error: " <> err
-              Right incoming -> log $ "got a message: " <> show (incoming :: Action)
-            reactSpec.getInitialState this
+              Right incoming -> do
+                log $ "got a message: " <> show (incoming :: Action)
+                dispatcher this incoming
         }
 
 

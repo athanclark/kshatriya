@@ -3454,20 +3454,20 @@ var PS = {};
                   $87[$88] = v["spec"][$88];
               };
           };
-          $87.getInitialState = function ($$this) {
-              return function __do() {
-                  Socket.on(function (msg) {
-                      var v2 = Control_Bind.bindFlipped(Data_Either.bindEither)(Data_Argonaut_Decode_Class.decodeJson(decodeJsonOutgoing))(Data_Argonaut_Parser.jsonParser(msg));
-                      if (v2 instanceof Data_Either.Left) {
-                          return Control_Monad_Eff_Console.warn("json decoding error: " + v2.value0);
+          $87.componentDidMount = function ($$this) {
+              return Socket.on(function (msg) {
+                  var v2 = Control_Bind.bindFlipped(Data_Either.bindEither)(Data_Argonaut_Decode_Class.decodeJson(decodeJsonOutgoing))(Data_Argonaut_Parser.jsonParser(msg));
+                  if (v2 instanceof Data_Either.Left) {
+                      return Control_Monad_Eff_Console.warn("json decoding error: " + v2.value0);
+                  };
+                  if (v2 instanceof Data_Either.Right) {
+                      return function __do() {
+                          Control_Monad_Eff_Console.log("got a message: " + Data_Show.show(showAction)(v2.value0))();
+                          return v.dispatcher($$this)(v2.value0)();
                       };
-                      if (v2 instanceof Data_Either.Right) {
-                          return Control_Monad_Eff_Console.log("got a message: " + Data_Show.show(showAction)(v2.value0));
-                      };
-                      throw new Error("Failed pattern match at Main line 111, column 26 - line 113, column 85: " + [ v2.constructor.name ]);
-                  })();
-                  return v.spec.getInitialState($$this)();
-              };
+                  };
+                  throw new Error("Failed pattern match at Main line 111, column 26 - line 115, column 41: " + [ v2.constructor.name ]);
+              });
           };
           return $87;
       })());
