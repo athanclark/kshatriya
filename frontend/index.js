@@ -3454,7 +3454,7 @@ var PS = {};
               return function (v2) {
                   return function (v3) {
                       return [ React_DOM.div([ React_DOM_Props.className("ui grid"), React_DOM_Props._id("root") ])([ React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
-                          height: "33%"
+                          height: "160px"
                       }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
                           background: (function () {
                               if (v2.braking) {
@@ -3471,7 +3471,7 @@ var PS = {};
                           };
                           return "";
                       })()) ]) ]) ]), React_DOM.div([ React_DOM_Props.className("three column row"), React_DOM_Props.style({
-                          height: "33%"
+                          height: "160px"
                       }) ])([ React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
                           paddingTop: "4em"
                       }) ])([ React_DOM.i([ React_DOM_Props.className("caret left icon" + (function () {
@@ -3511,7 +3511,7 @@ var PS = {};
                               opacity: 0
                           });
                       })() ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
-                          height: "33%", 
+                          height: "160px", 
                           paddingBottom: 0
                       }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
                           background: (function () {

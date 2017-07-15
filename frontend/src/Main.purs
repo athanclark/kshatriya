@@ -104,7 +104,7 @@ spec = T.simpleSpec performAction render
               , RP._id "root"
               ]
           [ R.div [ RP.className "one column row"
-                  , RP.style {height: "33%"}
+                  , RP.style {height: "160px"}
                   ]
               [ R.div [ RP.className "column"
                       , RP.style {background: if braking then "#f00" else "rgba(0,0,0,0)"}
@@ -115,7 +115,7 @@ spec = T.simpleSpec performAction render
                   ]
               ]
           , R.div [ RP.className "three column row"
-                  , RP.style {height: "33%"}
+                  , RP.style {height: "160px"}
                   ]
               [ R.div [ RP.className "center aligned column"
                       , RP.style {paddingTop: "4em"}
@@ -148,7 +148,7 @@ spec = T.simpleSpec performAction render
                   ]
               ]
           , R.div [ RP.className "one column row"
-                  , RP.style {height: "33%", paddingBottom: 0}
+                  , RP.style {height: "160px", paddingBottom: 0}
                   ]
               [ R.div [ RP.className "column"
                       , RP.style {background: if lights then "#fff" else "rgba(0,0,0,0)"}
