@@ -3280,16 +3280,32 @@ var PS = {};
                               return " flashing";
                           };
                           return "";
-                      })()), React_DOM_Props.style({
-                          color: "#ff0"
-                      }) ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column") ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {
+                      })()), (function () {
+                          if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof LeftDir) {
+                              return React_DOM_Props.style({
+                                  color: "#ff0", 
+                                  fontSize: "5em"
+                              });
+                          };
+                          return React_DOM_Props.style({
+                              opacity: 0
+                          });
+                      })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column") ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
                               return " flashing";
                           };
                           return "";
-                      })()), React_DOM_Props.style({
-                          color: "#ff0"
-                      }) ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
+                      })()), (function () {
+                          if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
+                              return React_DOM_Props.style({
+                                  color: "#ff0", 
+                                  fontSize: "5em"
+                              });
+                          };
+                          return React_DOM_Props.style({
+                              opacity: 0
+                          });
+                      })() ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
                           height: "33%"
                       }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
                           background: (function () {
@@ -3316,65 +3332,53 @@ var PS = {};
                   return Control_Bind.discard(Control_Bind.discardUnit)(Control_Monad_Free_Trans.bindFreeT(Control_Coroutine.functorCoTransform)(Control_Monad_Aff.monadAff))(Data_Functor["void"](Control_Monad_Free_Trans.functorFreeT(Control_Coroutine.functorCoTransform)(Control_Monad_Aff.functorAff))((function () {
                       if (action instanceof ChangedSpeed) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $48 = {};
-                              for (var $49 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $49)) {
-                                      $48[$49] = v2[$49];
-                                  };
-                              };
-                              $48.speed = action.value0;
-                              return $48;
-                          });
-                      };
-                      if (action instanceof TurningLeft) {
-                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
                               var $52 = {};
                               for (var $53 in v2) {
                                   if ({}.hasOwnProperty.call(v2, $53)) {
                                       $52[$53] = v2[$53];
                                   };
                               };
-                              $52.turning = new Data_Maybe.Just(LeftDir.value);
+                              $52.speed = action.value0;
                               return $52;
+                          });
+                      };
+                      if (action instanceof TurningLeft) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $56 = {};
+                              for (var $57 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $57)) {
+                                      $56[$57] = v2[$57];
+                                  };
+                              };
+                              $56.turning = new Data_Maybe.Just(LeftDir.value);
+                              return $56;
                           });
                       };
                       if (action instanceof TurningRight) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $55 = {};
-                              for (var $56 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $56)) {
-                                      $55[$56] = v2[$56];
+                              var $59 = {};
+                              for (var $60 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $60)) {
+                                      $59[$60] = v2[$60];
                                   };
                               };
-                              $55.turning = new Data_Maybe.Just(RightDir.value);
-                              return $55;
+                              $59.turning = new Data_Maybe.Just(RightDir.value);
+                              return $59;
                           });
                       };
                       if (action instanceof NotTurning) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $58 = {};
-                              for (var $59 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $59)) {
-                                      $58[$59] = v2[$59];
+                              var $62 = {};
+                              for (var $63 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $63)) {
+                                      $62[$63] = v2[$63];
                                   };
                               };
-                              $58.turning = Data_Maybe.Nothing.value;
-                              return $58;
+                              $62.turning = Data_Maybe.Nothing.value;
+                              return $62;
                           });
                       };
                       if (action instanceof ChangedBraking) {
-                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $61 = {};
-                              for (var $62 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $62)) {
-                                      $61[$62] = v2[$62];
-                                  };
-                              };
-                              $61.braking = action.value0;
-                              return $61;
-                          });
-                      };
-                      if (action instanceof ChangedLights) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
                               var $65 = {};
                               for (var $66 in v2) {
@@ -3382,11 +3386,11 @@ var PS = {};
                                       $65[$66] = v2[$66];
                                   };
                               };
-                              $65.lights = action.value0;
+                              $65.braking = action.value0;
                               return $65;
                           });
                       };
-                      if (action instanceof ChangedHorn) {
+                      if (action instanceof ChangedLights) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
                               var $69 = {};
                               for (var $70 in v2) {
@@ -3394,8 +3398,20 @@ var PS = {};
                                       $69[$70] = v2[$70];
                                   };
                               };
-                              $69.horn = action.value0;
+                              $69.lights = action.value0;
                               return $69;
+                          });
+                      };
+                      if (action instanceof ChangedHorn) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $73 = {};
+                              for (var $74 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $74)) {
+                                      $73[$74] = v2[$74];
+                                  };
+                              };
+                              $73.horn = action.value0;
+                              return $73;
                           });
                       };
                       throw new Error("Failed pattern match at Main line 88, column 14 - line 95, column 57: " + [ action.constructor.name ]);
@@ -3525,13 +3541,13 @@ var PS = {};
   var mainClass = (function () {
       var v = Thermite.createReactSpec(spec)(initialState);
       return React.createClass((function () {
-          var $104 = {};
-          for (var $105 in v.spec) {
-              if ({}.hasOwnProperty.call(v.spec, $105)) {
-                  $104[$105] = v["spec"][$105];
+          var $108 = {};
+          for (var $109 in v.spec) {
+              if ({}.hasOwnProperty.call(v.spec, $109)) {
+                  $108[$109] = v["spec"][$109];
               };
           };
-          $104.componentDidMount = function ($$this) {
+          $108.componentDidMount = function ($$this) {
               return Socket.on(function (msg) {
                   var v2 = Control_Bind.bindFlipped(Data_Either.bindEither)(Data_Argonaut_Decode_Class.decodeJson(decodeJsonOutgoing))(Data_Argonaut_Parser.jsonParser(msg));
                   if (v2 instanceof Data_Either.Left) {
@@ -3543,18 +3559,18 @@ var PS = {};
                           return v.dispatcher($$this)(v2.value0)();
                       };
                   };
-                  throw new Error("Failed pattern match at Main line 156, column 26 - line 160, column 41: " + [ v2.constructor.name ]);
+                  throw new Error("Failed pattern match at Main line 160, column 26 - line 164, column 41: " + [ v2.constructor.name ]);
               });
           };
-          return $104;
+          return $108;
       })());
   })();
   var main = function __do() {
       Control_Monad_Eff_Console.log("Hello sailor!")();
       var v = Control_Bind.bind(Control_Monad_Eff.bindEff)(DOM_HTML.window)(DOM_HTML_Window.document)();
       var v1 = DOM_HTML_Document.body(v)();
-      return Data_Foldable.traverse_(Control_Monad_Eff.applicativeEff)(Data_Foldable.foldableMaybe)(function ($110) {
-          return ReactDOM.render(React.createFactory(mainClass)(Data_Unit.unit))(DOM_HTML_Types.htmlElementToElement($110));
+      return Data_Foldable.traverse_(Control_Monad_Eff.applicativeEff)(Data_Foldable.foldableMaybe)(function ($114) {
+          return ReactDOM.render(React.createFactory(mainClass)(Data_Unit.unit))(DOM_HTML_Types.htmlElementToElement($114));
       })(v1)();
   };
   exports["ChangedSpeed"] = ChangedSpeed;
