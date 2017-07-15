@@ -114,12 +114,14 @@ spec = T.simpleSpec performAction render
           , R.div [ RP.className "three column row"
                   , RP.style {height: "33%"}
                   ]
-              [ R.div [ RP.className "center aligned column"]
+              [ R.div [ RP.className "center aligned column"
+                      , RP.style {marginTop: "1em"}
+                      ]
                   [ R.i [ RP.className $ "caret left icon" <> case turning of
                            Just LeftDir -> " flashing"
                            _            -> ""
                         , case turning of
-                            Just LeftDir -> RP.style {color : "#ff0", fontSize: "15em"}
+                            Just LeftDir -> RP.style {color : "#ff0", fontSize: "10em"}
                             _            -> RP.style {opacity: 0}
                         ] []
                   ]
@@ -127,12 +129,14 @@ spec = T.simpleSpec performAction render
                   [ R.h1 [ RP.className "ui center aligned header"
                          ] [R.text $ show speed <> " mph"]
                   ]
-              , R.div [RP.className "center aligned column"]
+              , R.div [ RP.className "center aligned column"
+                      , RP.style {marginTop: "1em"}
+                      ]
                   [ R.i [ RP.className $ "caret right icon" <> case turning of
                            Just RightDir -> " flashing"
                            _            -> ""
                         , case turning of
-                            Just RightDir -> RP.style {color : "#ff0", fontSize: "15em"}
+                            Just RightDir -> RP.style {color : "#ff0", fontSize: "10em"}
                             _             -> RP.style {opacity: 0}
                         ] []
                   ]
