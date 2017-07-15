@@ -3047,8 +3047,6 @@ var PS = {};
 (function(exports) {
     "use strict";
 
-
-
   var socket = new WebSocket('ws://localhost:3000');
 
 
@@ -3492,7 +3490,7 @@ var PS = {};
                               opacity: 0
                           });
                       })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
-                          paddingTop: "4em"
+                          paddingTop: "2em"
                       }) ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header"), React_DOM_Props.style({
                           fontSize: "4em"
                       }) ])([ React_DOM.text(formatMph(v2.speed)) ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
@@ -3513,7 +3511,8 @@ var PS = {};
                               opacity: 0
                           });
                       })() ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
-                          height: "33%"
+                          height: "33%", 
+                          paddingBottom: 0
                       }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
                           background: (function () {
                               if (v2.lights) {

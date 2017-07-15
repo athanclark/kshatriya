@@ -1,7 +1,5 @@
 "use strict";
 
-
-
 var socket = new WebSocket('ws://localhost:3000');
 
 
