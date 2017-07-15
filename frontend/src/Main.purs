@@ -7,6 +7,9 @@ import Data.Maybe (Maybe (..))
 import Data.Either (Either (..))
 import Data.Argonaut (decodeJson, jsonParser, class DecodeJson, (.?))
 import Data.Generic (class Generic, gShow)
+import Data.String (toCharArray, fromCharArray)
+import Data.Array as Array
+import Data.Foldable (foldl)
 import Control.Alternative ((<|>))
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log, warn)
@@ -130,7 +133,26 @@ spec = T.simpleSpec performAction render
                       ]
                   [ R.h1 [ RP.className "ui center aligned header"
                          , RP.style {fontSize: "4em"}
-                         ] [R.text $ show (speed * 1000.0 * 2.23694) <> " mph"]
+                         ] [ R.text $
+                               let x = speed * 1000.0 * 2.23694
+                                   xs = toCharArray $ show x
+                                   xs' = let go s@{acc,hitDot} c
+                                               | c == '.' =
+                                                   { hitDot : Just 0
+                                                   , acc : Array.snoc acc c
+                                                   }
+                                               | otherwise = case hitDot of
+                                                   Nothing -> s {acc = Array.snoc acc c}
+                                                   Just n
+                                                     | n <= 2 ->
+                                                         { hitDot : Just (n+1)
+                                                         , acc : Array.snoc acc c
+                                                         }
+                                                     | otherwise -> s
+                                         in  (foldl go { hitDot : Nothing, acc : [] } xs).acc
+                                   x' = fromCharArray xs'
+                               in  show x' <> " mph"
+                           ]
                   ]
               , R.div [ RP.className "center aligned column"
                       , RP.style {paddingTop: "4em"}
