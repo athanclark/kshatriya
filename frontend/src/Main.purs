@@ -92,13 +92,42 @@ spec = T.simpleSpec performAction render
 
     render :: T.Render State Props Action
     render _ _ {speed,turning,braking} _ =
-      [ R.p [] [R.text $ "speed: " <> show speed]
-      , R.p [] [R.text $ case turning of
-          Nothing -> "not turning"
-          Just d -> case d of
-            LeftDir -> "turning left"
-            RightDir -> "turning right"]
-      , R.p [] [R.text $ if braking then "braking" else "not braking"]
+      [ R.div [ RP.className "ui grid"
+              , RP._id "root"
+              ]
+          [ R.div [ RP.className "one column row"
+                  , RP.style {height: "33%"}
+                  ]
+              [ R.div [ RP.className "column"
+                      , RP.style {background: if braking then "#fff" else "rgba(0,0,0,0)"}
+                      ]
+                  [ R.h2 [ RP.className "ui center aligned header"
+                         , RP.style {color: "#fff"}
+                         ] [R.text $ if braking then "braking" else ""]
+                  ]
+              ]
+          , R.div [ RP.className "three column row"
+                  , RP.style {height: "33%"}
+                  ]
+              [ R.div [RP.className "column"] $ case turning of
+                  Just LeftDir -> [R.text "turning left"]
+                  _            -> []
+              , R.div [RP.className "column"]
+                  [ R.h1 [ RP.className "ui center aligned header"
+                         ] [R.text $ show speed <> " mph"]
+                  ]
+              , R.div [RP.className "column"] $ case turning of
+                  Just RightDir -> [R.text "turning right"]
+                  _             -> []
+              ]
+          , R.div [ RP.className "one column row"
+                  , RP.style {height: "33%"}
+                  ]
+              [ R.div [RP.className "column"]
+                  [
+                  ]
+              ]
+          ]
       ]
 
 
