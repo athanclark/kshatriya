@@ -33,6 +33,7 @@ type State =
   , turning :: Maybe Direction
   , braking :: Boolean
   , lights  :: Boolean
+  , horn    :: Boolean
   }
 
 initialState :: State
@@ -41,6 +42,7 @@ initialState =
   , turning : Nothing
   , braking : false
   , lights  : false
+  , horn    : false
   }
 
 data Action
@@ -50,6 +52,7 @@ data Action
   | NotTurning
   | ChangedBraking Boolean
   | ChangedLights Boolean
+  | ChangedHorn Boolean
 
 derive instance genericAction :: Generic Action
 
@@ -64,6 +67,7 @@ instance decodeJsonOutgoing :: DecodeJson Action where
         (ChangedSpeed <$> o .? "speed")
           <|> (ChangedBraking <$> o .? "braking")
           <|> (ChangedLights <$> o .? "lights")
+          <|> (ChangedHorn <$> o .? "horn")
       decodeString = do
         s <- decodeJson json
         case s of
@@ -88,10 +92,11 @@ spec = T.simpleSpec performAction render
         NotTurning       -> T.cotransform $ _ {turning = Nothing}
         ChangedBraking b -> T.cotransform $ _ {braking = b}
         ChangedLights l  -> T.cotransform $ _ {lights  = l}
+        ChangedHorn h    -> T.cotransform $ _ {horn = h}
       pure unit
 
     render :: T.Render State Props Action
-    render _ _ {speed,turning,braking} _ =
+    render _ _ {speed,turning,braking,lights,horn} _ =
       [ R.div [ RP.className "ui grid"
               , RP._id "root"
               ]
@@ -109,24 +114,33 @@ spec = T.simpleSpec performAction render
           , R.div [ RP.className "three column row"
                   , RP.style {height: "33%"}
                   ]
-              [ R.div [ RP.className $ "column" <> case turning of
+              [ R.div [ RP.className "center aligned column"]
+                  [ R.i [ RP.className $ "caret left icon" <> case turning of
                            Just LeftDir -> " flashing"
                            _            -> ""
-                      ] []
+                        , RP.style {color : "#ff0"}
+                        ] []
+                  ]
               , R.div [RP.className "column"]
                   [ R.h1 [ RP.className "ui center aligned header"
                          ] [R.text $ show speed <> " mph"]
                   ]
-              , R.div [ RP.className $ "column" <> case turning of
+              , R.div [ RP.className "center aligned column"]
+                  [ R.i [ RP.className $ "caret right icon" <> case turning of
                            Just RightDir -> " flashing"
-                           _             -> ""
-                      ] []
+                           _            -> ""
+                        , RP.style {color : "#ff0"}
+                        ] []
+                  ]
               ]
           , R.div [ RP.className "one column row"
                   , RP.style {height: "33%"}
                   ]
-              [ R.div [RP.className "column"]
-                  [
+              [ R.div [ RP.className "column"
+                      , RP.style {background: if lights then "#fff" else "rgba(0,0,0,0)"}
+                      ]
+                  [ R.h2 [RP.className "ui center aligned header", RP.style {marginTop: "2em"}]
+                      [R.text $ if lights then "lights" else ""]
                   ]
               ]
           ]

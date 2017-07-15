@@ -15,6 +15,7 @@ data Outgoing
   | NoTurn
   | ChangedBraking Boolean
   | ChangedLights Boolean
+  | ChangedHorn Boolean
 
 instance encodeJsonOutgoing :: EncodeJson Outgoing where
   encodeJson = case _ of
@@ -24,6 +25,7 @@ instance encodeJsonOutgoing :: EncodeJson Outgoing where
     NoTurn -> encodeJson "no"
     ChangedBraking b -> "braking" := b ~> jsonEmptyObject
     ChangedLights l -> "lights" := l ~> jsonEmptyObject
+    ChangedHorn h -> "horn" := h ~> jsonEmptyObject
 
 
 onReceive :: forall eff

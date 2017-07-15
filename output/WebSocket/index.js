@@ -58,6 +58,15 @@ var ChangedLights = (function () {
     };
     return ChangedLights;
 })();
+var ChangedHorn = (function () {
+    function ChangedHorn(value0) {
+        this.value0 = value0;
+    };
+    ChangedHorn.create = function (value0) {
+        return new ChangedHorn(value0);
+    };
+    return ChangedHorn;
+})();
 var onReceive = function (msg) {
     return Control_Monad_Eff_Console.log("received! " + msg);
 };
@@ -80,7 +89,10 @@ var encodeJsonOutgoing = new Data_Argonaut_Encode_Class.EncodeJson(function (v) 
     if (v instanceof ChangedLights) {
         return Data_Argonaut_Encode_Combinators.extend(Data_Argonaut_Encode_Class.encodeJsonJson)(Data_Argonaut_Encode_Combinators.assoc(Data_Argonaut_Encode_Class.encodeJsonJBoolean)("lights")(v.value0))(Data_Argonaut_Core.jsonEmptyObject);
     };
-    throw new Error("Failed pattern match at WebSocket line 20, column 16 - line 26, column 56: " + [ v.constructor.name ]);
+    if (v instanceof ChangedHorn) {
+        return Data_Argonaut_Encode_Combinators.extend(Data_Argonaut_Encode_Class.encodeJsonJson)(Data_Argonaut_Encode_Combinators.assoc(Data_Argonaut_Encode_Class.encodeJsonJBoolean)("horn")(v.value0))(Data_Argonaut_Core.jsonEmptyObject);
+    };
+    throw new Error("Failed pattern match at WebSocket line 21, column 16 - line 28, column 52: " + [ v.constructor.name ]);
 });
 module.exports = {
     ChangedSpeed: ChangedSpeed, 
@@ -89,6 +101,7 @@ module.exports = {
     NoTurn: NoTurn, 
     ChangedBraking: ChangedBraking, 
     ChangedLights: ChangedLights, 
+    ChangedHorn: ChangedHorn, 
     onReceive: onReceive, 
     encodeJsonOutgoing: encodeJsonOutgoing
 };

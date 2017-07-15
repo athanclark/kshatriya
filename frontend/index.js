@@ -2968,7 +2968,8 @@ var PS = {};
               return createElement(tag)(React_DOM_Props.unsafeFromPropsArray(props));
           };
       };
-  };                      
+  };                              
+  var i = mkDOM(false)("i");
   var h2 = mkDOM(false)("h2");
   var h1 = mkDOM(false)("h1");
   var div = mkDOM(false)("div");
@@ -2977,6 +2978,7 @@ var PS = {};
   exports["div'"] = div$prime;
   exports["h1"] = h1;
   exports["h2"] = h2;
+  exports["i"] = i;
   exports["mkDOM"] = mkDOM;
   exports["text"] = text;
 })(PS["React.DOM"] = PS["React.DOM"] || {});
@@ -3240,6 +3242,15 @@ var PS = {};
       };
       return ChangedLights;
   })();
+  var ChangedHorn = (function () {
+      function ChangedHorn(value0) {
+          this.value0 = value0;
+      };
+      ChangedHorn.create = function (value0) {
+          return new ChangedHorn(value0);
+      };
+      return ChangedHorn;
+  })();
   var spec = (function () {
       var render = function (v) {
           return function (v1) {
@@ -3264,19 +3275,37 @@ var PS = {};
                           return "";
                       })()) ]) ]) ]), React_DOM.div([ React_DOM_Props.className("three column row"), React_DOM_Props.style({
                           height: "33%"
-                      }) ])([ React_DOM.div([ React_DOM_Props.className("column" + (function () {
+                      }) ])([ React_DOM.div([ React_DOM_Props.className("center aligned column") ])([ React_DOM.i([ React_DOM_Props.className("caret left icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof LeftDir) {
                               return " flashing";
                           };
                           return "";
-                      })()) ])([  ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("column" + (function () {
+                      })()), React_DOM_Props.style({
+                          color: "#ff0"
+                      }) ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column") ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
                               return " flashing";
                           };
                           return "";
-                      })()) ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
+                      })()), React_DOM_Props.style({
+                          color: "#ff0"
+                      }) ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
                           height: "33%"
-                      }) ])([ React_DOM.div([ React_DOM_Props.className("column") ])([  ]) ]) ]) ];
+                      }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
+                          background: (function () {
+                              if (v2.lights) {
+                                  return "#fff";
+                              };
+                              return "rgba(0,0,0,0)";
+                          })()
+                      }) ])([ React_DOM.h2([ React_DOM_Props.className("ui center aligned header"), React_DOM_Props.style({
+                          marginTop: "2em"
+                      }) ])([ React_DOM.text((function () {
+                          if (v2.lights) {
+                              return "lights";
+                          };
+                          return "";
+                      })()) ]) ]) ]) ]) ];
                   };
               };
           };
@@ -3287,65 +3316,41 @@ var PS = {};
                   return Control_Bind.discard(Control_Bind.discardUnit)(Control_Monad_Free_Trans.bindFreeT(Control_Coroutine.functorCoTransform)(Control_Monad_Aff.monadAff))(Data_Functor["void"](Control_Monad_Free_Trans.functorFreeT(Control_Coroutine.functorCoTransform)(Control_Monad_Aff.functorAff))((function () {
                       if (action instanceof ChangedSpeed) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $41 = {};
-                              for (var $42 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $42)) {
-                                      $41[$42] = v2[$42];
-                                  };
-                              };
-                              $41.speed = action.value0;
-                              return $41;
-                          });
-                      };
-                      if (action instanceof TurningLeft) {
-                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $45 = {};
-                              for (var $46 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $46)) {
-                                      $45[$46] = v2[$46];
-                                  };
-                              };
-                              $45.turning = new Data_Maybe.Just(LeftDir.value);
-                              return $45;
-                          });
-                      };
-                      if (action instanceof TurningRight) {
-                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
                               var $48 = {};
                               for (var $49 in v2) {
                                   if ({}.hasOwnProperty.call(v2, $49)) {
                                       $48[$49] = v2[$49];
                                   };
                               };
-                              $48.turning = new Data_Maybe.Just(RightDir.value);
+                              $48.speed = action.value0;
                               return $48;
                           });
                       };
+                      if (action instanceof TurningLeft) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $52 = {};
+                              for (var $53 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $53)) {
+                                      $52[$53] = v2[$53];
+                                  };
+                              };
+                              $52.turning = new Data_Maybe.Just(LeftDir.value);
+                              return $52;
+                          });
+                      };
+                      if (action instanceof TurningRight) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $55 = {};
+                              for (var $56 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $56)) {
+                                      $55[$56] = v2[$56];
+                                  };
+                              };
+                              $55.turning = new Data_Maybe.Just(RightDir.value);
+                              return $55;
+                          });
+                      };
                       if (action instanceof NotTurning) {
-                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $51 = {};
-                              for (var $52 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $52)) {
-                                      $51[$52] = v2[$52];
-                                  };
-                              };
-                              $51.turning = Data_Maybe.Nothing.value;
-                              return $51;
-                          });
-                      };
-                      if (action instanceof ChangedBraking) {
-                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
-                              var $54 = {};
-                              for (var $55 in v2) {
-                                  if ({}.hasOwnProperty.call(v2, $55)) {
-                                      $54[$55] = v2[$55];
-                                  };
-                              };
-                              $54.braking = action.value0;
-                              return $54;
-                          });
-                      };
-                      if (action instanceof ChangedLights) {
                           return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
                               var $58 = {};
                               for (var $59 in v2) {
@@ -3353,11 +3358,47 @@ var PS = {};
                                       $58[$59] = v2[$59];
                                   };
                               };
-                              $58.lights = action.value0;
+                              $58.turning = Data_Maybe.Nothing.value;
                               return $58;
                           });
                       };
-                      throw new Error("Failed pattern match at Main line 84, column 14 - line 90, column 60: " + [ action.constructor.name ]);
+                      if (action instanceof ChangedBraking) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $61 = {};
+                              for (var $62 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $62)) {
+                                      $61[$62] = v2[$62];
+                                  };
+                              };
+                              $61.braking = action.value0;
+                              return $61;
+                          });
+                      };
+                      if (action instanceof ChangedLights) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $65 = {};
+                              for (var $66 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $66)) {
+                                      $65[$66] = v2[$66];
+                                  };
+                              };
+                              $65.lights = action.value0;
+                              return $65;
+                          });
+                      };
+                      if (action instanceof ChangedHorn) {
+                          return Control_Coroutine.cotransform(Control_Monad_Aff.monadAff)(function (v2) {
+                              var $69 = {};
+                              for (var $70 in v2) {
+                                  if ({}.hasOwnProperty.call(v2, $70)) {
+                                      $69[$70] = v2[$70];
+                                  };
+                              };
+                              $69.horn = action.value0;
+                              return $69;
+                          });
+                      };
+                      throw new Error("Failed pattern match at Main line 88, column 14 - line 95, column 57: " + [ action.constructor.name ]);
                   })()))(function () {
                       return Control_Applicative.pure(Control_Monad_Free_Trans.applicativeFreeT(Control_Coroutine.functorCoTransform)(Control_Monad_Aff.monadAff))(Data_Unit.unit);
                   });
@@ -3370,7 +3411,8 @@ var PS = {};
       speed: 0.0, 
       turning: Data_Maybe.Nothing.value, 
       braking: false, 
-      lights: false
+      lights: false, 
+      horn: false
   };
   var genericAction = new Data_Generic.Generic(function (v) {
       if (v instanceof Data_Generic.SProd && (v.value0 === "Main.ChangedSpeed" && v.value1.length === 1)) {
@@ -3390,6 +3432,9 @@ var PS = {};
       };
       if (v instanceof Data_Generic.SProd && (v.value0 === "Main.ChangedLights" && v.value1.length === 1)) {
           return Control_Apply.apply(Data_Maybe.applyMaybe)(new Data_Maybe.Just(ChangedLights.create))(Data_Generic.fromSpine(Data_Generic.genericBool)(v["value1"][0](Data_Unit.unit)));
+      };
+      if (v instanceof Data_Generic.SProd && (v.value0 === "Main.ChangedHorn" && v.value1.length === 1)) {
+          return Control_Apply.apply(Data_Maybe.applyMaybe)(new Data_Maybe.Just(ChangedHorn.create))(Data_Generic.fromSpine(Data_Generic.genericBool)(v["value1"][0](Data_Unit.unit)));
       };
       return Data_Maybe.Nothing.value;
   }, function ($dollarq) {
@@ -3414,6 +3459,11 @@ var PS = {};
           } ]
       }, {
           sigConstructor: "Main.ChangedLights", 
+          sigValues: [ function ($dollarq1) {
+              return Data_Generic.toSignature(Data_Generic.genericBool)(Data_Generic.anyProxy);
+          } ]
+      }, {
+          sigConstructor: "Main.ChangedHorn", 
           sigValues: [ function ($dollarq1) {
               return Data_Generic.toSignature(Data_Generic.genericBool)(Data_Generic.anyProxy);
           } ]
@@ -3443,7 +3493,12 @@ var PS = {};
               return Data_Generic.toSpine(Data_Generic.genericBool)(v.value0);
           } ]);
       };
-      throw new Error("Failed pattern match at Main line 54, column 1 - line 54, column 48: " + [ v.constructor.name ]);
+      if (v instanceof ChangedHorn) {
+          return new Data_Generic.SProd("Main.ChangedHorn", [ function ($dollarq) {
+              return Data_Generic.toSpine(Data_Generic.genericBool)(v.value0);
+          } ]);
+      };
+      throw new Error("Failed pattern match at Main line 57, column 1 - line 57, column 48: " + [ v.constructor.name ]);
   });
   var showAction = new Data_Show.Show(Data_Generic.gShow(genericAction));
   var decodeJsonOutgoing = new Data_Argonaut_Decode_Class.DecodeJson(function (json) {
@@ -3460,23 +3515,23 @@ var PS = {};
           if (Data_Boolean.otherwise) {
               return new Data_Either.Left("Not an Action");
           };
-          throw new Error("Failed pattern match at Main line 69, column 9 - line 75, column 1: " + [ v.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 73, column 9 - line 79, column 1: " + [ v.constructor.name ]);
       });
       var decodeObject = Control_Bind.bind(Data_Either.bindEither)(Data_Argonaut_Decode_Class.decodeJson(Data_Argonaut_Decode_Class.decodeStrMap(Data_Argonaut_Decode_Class.decodeJsonJson))(json))(function (v) {
-          return Control_Alt.alt(Data_Either.altEither)(Control_Alt.alt(Data_Either.altEither)(Data_Functor.map(Data_Either.functorEither)(ChangedSpeed.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonNumber)(v)("speed")))(Data_Functor.map(Data_Either.functorEither)(ChangedBraking.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonBoolean)(v)("braking"))))(Data_Functor.map(Data_Either.functorEither)(ChangedLights.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonBoolean)(v)("lights")));
+          return Control_Alt.alt(Data_Either.altEither)(Control_Alt.alt(Data_Either.altEither)(Control_Alt.alt(Data_Either.altEither)(Data_Functor.map(Data_Either.functorEither)(ChangedSpeed.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonNumber)(v)("speed")))(Data_Functor.map(Data_Either.functorEither)(ChangedBraking.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonBoolean)(v)("braking"))))(Data_Functor.map(Data_Either.functorEither)(ChangedLights.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonBoolean)(v)("lights"))))(Data_Functor.map(Data_Either.functorEither)(ChangedHorn.create)(Data_Argonaut_Decode_Combinators.getField(Data_Argonaut_Decode_Class.decodeJsonBoolean)(v)("horn")));
       });
       return Control_Alt.alt(Data_Either.altEither)(decodeObject)(decodeString);
   });
   var mainClass = (function () {
       var v = Thermite.createReactSpec(spec)(initialState);
       return React.createClass((function () {
-          var $89 = {};
-          for (var $90 in v.spec) {
-              if ({}.hasOwnProperty.call(v.spec, $90)) {
-                  $89[$90] = v["spec"][$90];
+          var $104 = {};
+          for (var $105 in v.spec) {
+              if ({}.hasOwnProperty.call(v.spec, $105)) {
+                  $104[$105] = v["spec"][$105];
               };
           };
-          $89.componentDidMount = function ($$this) {
+          $104.componentDidMount = function ($$this) {
               return Socket.on(function (msg) {
                   var v2 = Control_Bind.bindFlipped(Data_Either.bindEither)(Data_Argonaut_Decode_Class.decodeJson(decodeJsonOutgoing))(Data_Argonaut_Parser.jsonParser(msg));
                   if (v2 instanceof Data_Either.Left) {
@@ -3488,18 +3543,18 @@ var PS = {};
                           return v.dispatcher($$this)(v2.value0)();
                       };
                   };
-                  throw new Error("Failed pattern match at Main line 142, column 26 - line 146, column 41: " + [ v2.constructor.name ]);
+                  throw new Error("Failed pattern match at Main line 156, column 26 - line 160, column 41: " + [ v2.constructor.name ]);
               });
           };
-          return $89;
+          return $104;
       })());
   })();
   var main = function __do() {
       Control_Monad_Eff_Console.log("Hello sailor!")();
       var v = Control_Bind.bind(Control_Monad_Eff.bindEff)(DOM_HTML.window)(DOM_HTML_Window.document)();
       var v1 = DOM_HTML_Document.body(v)();
-      return Data_Foldable.traverse_(Control_Monad_Eff.applicativeEff)(Data_Foldable.foldableMaybe)(function ($95) {
-          return ReactDOM.render(React.createFactory(mainClass)(Data_Unit.unit))(DOM_HTML_Types.htmlElementToElement($95));
+      return Data_Foldable.traverse_(Control_Monad_Eff.applicativeEff)(Data_Foldable.foldableMaybe)(function ($110) {
+          return ReactDOM.render(React.createFactory(mainClass)(Data_Unit.unit))(DOM_HTML_Types.htmlElementToElement($110));
       })(v1)();
   };
   exports["ChangedSpeed"] = ChangedSpeed;
@@ -3508,6 +3563,7 @@ var PS = {};
   exports["NotTurning"] = NotTurning;
   exports["ChangedBraking"] = ChangedBraking;
   exports["ChangedLights"] = ChangedLights;
+  exports["ChangedHorn"] = ChangedHorn;
   exports["LeftDir"] = LeftDir;
   exports["RightDir"] = RightDir;
   exports["initialState"] = initialState;

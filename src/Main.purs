@@ -188,6 +188,7 @@ pinCallback dispatchWS stateRef pin
   | pin == toGPIOPin HornSig = do
       on <- read (toGPIOPin HornSig)
       log $ "Horn signal: " <> show on
+      dispatchWS $ ChangedHorn on
       write (toGPIOPin Horn) on
   | pin == toGPIOPin WheelSig = do
       on <- read (toGPIOPin WheelSig)
