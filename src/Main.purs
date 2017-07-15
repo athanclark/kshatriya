@@ -213,18 +213,24 @@ pinCallback dispatchWS stateRef pin
                       circum = 2.0 * pi * wheelRadius
                       spd = circum / dur
                   case lastSpeed of
-                    Nothing -> modifyRef stateRef $ _ { wheel = { lastHit : Just x
-                                                                , lastSpeed : Just $ (3.0 / 4.0) * spd
-                                                                , sensor : HitSensor
-                                                                }
+                    Nothing -> do
+                      let spd_ = (3.0 / 4.0) * spd
+                      log $ "New speed: " <> show spd_
+                      dispatchWS $ ChangedSpeed spd_
+                      modifyRef stateRef $ _ { wheel = { lastHit : Just x
+                                                      , lastSpeed : Just spd_
+                                                      , sensor : HitSensor
                                                       }
-                    Just spd' ->
+                                            }
+                    Just spd' -> do
                       let spd_ = ((3.0 / 4.0) * (spd - spd')) + spd'
-                      in  modifyRef stateRef $ _ { wheel = { lastHit : Just x
-                                                           , lastSpeed : Just spd_
-                                                           , sensor : HitSensor
-                                                           }
-                                                 }
+                      log $ "New speed: " <> show spd'
+                      dispatchWS $ ChangedSpeed spd_
+                      modifyRef stateRef $ _ { wheel = { lastHit : Just x
+                                                      , lastSpeed : Just spd_
+                                                      , sensor : HitSensor
+                                                      }
+                                            }
               HitSensor -> pure unit
             else case sensor of
               LeftSensor -> pure unit

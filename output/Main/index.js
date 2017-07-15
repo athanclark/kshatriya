@@ -227,6 +227,9 @@ var pinCallback = function (dispatchWS) {
                                 var circum = 2.0 * $$Math.pi * Kshatriya.wheelRadius;
                                 var spd = circum / v3;
                                 if (v1.wheel.lastSpeed instanceof Data_Maybe.Nothing) {
+                                    var spd_ = (3.0 / 4.0) * spd;
+                                    Control_Monad_Eff_Console.log("New speed: " + Data_Show.show(Data_Show.showNumber)(spd_))();
+                                    dispatchWS(new WebSocket.ChangedSpeed(spd_))();
                                     return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
                                         var $99 = {};
                                         for (var $100 in v4) {
@@ -236,7 +239,7 @@ var pinCallback = function (dispatchWS) {
                                         };
                                         $99.wheel = {
                                             lastHit: new Data_Maybe.Just(v2), 
-                                            lastSpeed: Data_Maybe.Just.create((3.0 / 4.0) * spd), 
+                                            lastSpeed: new Data_Maybe.Just(spd_), 
                                             sensor: HitSensor.value
                                         };
                                         return $99;
@@ -244,6 +247,8 @@ var pinCallback = function (dispatchWS) {
                                 };
                                 if (v1.wheel.lastSpeed instanceof Data_Maybe.Just) {
                                     var spd_ = (3.0 / 4.0) * (spd - v1.wheel.lastSpeed.value0) + v1.wheel.lastSpeed.value0;
+                                    Control_Monad_Eff_Console.log("New speed: " + Data_Show.show(Data_Show.showNumber)(v1.wheel.lastSpeed.value0))();
+                                    dispatchWS(new WebSocket.ChangedSpeed(spd_))();
                                     return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
                                         var $102 = {};
                                         for (var $103 in v4) {
@@ -259,14 +264,14 @@ var pinCallback = function (dispatchWS) {
                                         return $102;
                                     })();
                                 };
-                                throw new Error("Failed pattern match at Main line 215, column 19 - line 227, column 51: " + [ v1.wheel.lastSpeed.constructor.name ]);
+                                throw new Error("Failed pattern match at Main line 215, column 19 - line 233, column 46: " + [ v1.wheel.lastSpeed.constructor.name ]);
                             };
-                            throw new Error("Failed pattern match at Main line 200, column 29 - line 227, column 51: " + [ v1.wheel.lastHit.constructor.name ]);
+                            throw new Error("Failed pattern match at Main line 200, column 29 - line 233, column 46: " + [ v1.wheel.lastHit.constructor.name ]);
                         };
                         if (v1.wheel.sensor instanceof HitSensor) {
                             return Data_Unit.unit;
                         };
-                        throw new Error("Failed pattern match at Main line 199, column 18 - line 228, column 37: " + [ v1.wheel.sensor.constructor.name ]);
+                        throw new Error("Failed pattern match at Main line 199, column 18 - line 234, column 37: " + [ v1.wheel.sensor.constructor.name ]);
                     };
                     if (v1.wheel.sensor instanceof LeftSensor) {
                         return Data_Unit.unit;
@@ -292,13 +297,13 @@ var pinCallback = function (dispatchWS) {
                             return $111;
                         })();
                     };
-                    throw new Error("Failed pattern match at Main line 229, column 18 - line 232, column 70: " + [ v1.wheel.sensor.constructor.name ]);
+                    throw new Error("Failed pattern match at Main line 235, column 18 - line 238, column 70: " + [ v1.wheel.sensor.constructor.name ]);
                 };
             };
             if (Data_Boolean.otherwise) {
                 return Control_Monad_Eff_Console.log("!?!");
             };
-            throw new Error("Failed pattern match at Main line 121, column 1 - line 234, column 11: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
+            throw new Error("Failed pattern match at Main line 121, column 1 - line 240, column 11: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
         };
     };
 };
