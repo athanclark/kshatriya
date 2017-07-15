@@ -3293,7 +3293,7 @@ var PS = {};
                               opacity: 0
                           });
                       })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header"), React_DOM_Props.style({
-                          fontSize: "2em"
+                          fontSize: "4em"
                       }) ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
                           marginTop: "4em"
                       }) ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {

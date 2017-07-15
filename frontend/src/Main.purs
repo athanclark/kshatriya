@@ -127,7 +127,7 @@ spec = T.simpleSpec performAction render
                   ]
               , R.div [RP.className "column"]
                   [ R.h1 [ RP.className "ui center aligned header"
-                         , RP.style {fontSize: "2em"}
+                         , RP.style {fontSize: "4em"}
                          ] [R.text $ show speed <> " mph"]
                   ]
               , R.div [ RP.className "center aligned column"
