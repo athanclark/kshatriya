@@ -102,23 +102,25 @@ spec = T.simpleSpec performAction render
                       , RP.style {background: if braking then "#f00" else "rgba(0,0,0,0)"}
                       ]
                   [ R.h2 [ RP.className "ui center aligned header"
-                         , RP.style {color: "#fff"}
+                         , RP.style {color: "#fff", marginTop: "2em"}
                          ] [R.text $ if braking then "braking" else ""]
                   ]
               ]
           , R.div [ RP.className "three column row"
                   , RP.style {height: "33%"}
                   ]
-              [ R.div [RP.className "column"] $ case turning of
-                  Just LeftDir -> [R.text "turning left"]
-                  _            -> []
+              [ R.div [ RP.className $ "column" <> case turning of
+                           Just LeftDir -> " flashing"
+                           _            -> ""
+                      ] []
               , R.div [RP.className "column"]
                   [ R.h1 [ RP.className "ui center aligned header"
                          ] [R.text $ show speed <> " mph"]
                   ]
-              , R.div [RP.className "column"] $ case turning of
-                  Just RightDir -> [R.text "turning right"]
-                  _             -> []
+              , R.div [ RP.className $ "column" <> case turning of
+                           Just RightDir -> " flashing"
+                           _             -> ""
+                      ] []
               ]
           , R.div [ RP.className "one column row"
                   , RP.style {height: "33%"}

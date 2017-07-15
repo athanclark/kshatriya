@@ -3255,7 +3255,8 @@ var PS = {};
                               return "rgba(0,0,0,0)";
                           })()
                       }) ])([ React_DOM.h2([ React_DOM_Props.className("ui center aligned header"), React_DOM_Props.style({
-                          color: "#fff"
+                          color: "#fff", 
+                          marginTop: "2em"
                       }) ])([ React_DOM.text((function () {
                           if (v2.braking) {
                               return "braking";
@@ -3263,17 +3264,17 @@ var PS = {};
                           return "";
                       })()) ]) ]) ]), React_DOM.div([ React_DOM_Props.className("three column row"), React_DOM_Props.style({
                           height: "33%"
-                      }) ])([ React_DOM.div([ React_DOM_Props.className("column") ])((function () {
+                      }) ])([ React_DOM.div([ React_DOM_Props.className("column" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof LeftDir) {
-                              return [ React_DOM.text("turning left") ];
+                              return " flashing";
                           };
-                          return [  ];
-                      })()), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])((function () {
+                          return "";
+                      })()) ])([  ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("column" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
-                              return [ React_DOM.text("turning right") ];
+                              return " flashing";
                           };
-                          return [  ];
-                      })()) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
+                          return "";
+                      })()) ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
                           height: "33%"
                       }) ])([ React_DOM.div([ React_DOM_Props.className("column") ])([  ]) ]) ]) ];
                   };
@@ -3487,7 +3488,7 @@ var PS = {};
                           return v.dispatcher($$this)(v2.value0)();
                       };
                   };
-                  throw new Error("Failed pattern match at Main line 140, column 26 - line 144, column 41: " + [ v2.constructor.name ]);
+                  throw new Error("Failed pattern match at Main line 142, column 26 - line 146, column 41: " + [ v2.constructor.name ]);
               });
           };
           return $89;
