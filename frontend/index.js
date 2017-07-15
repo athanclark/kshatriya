@@ -3276,7 +3276,7 @@ var PS = {};
                       })()) ]) ]) ]), React_DOM.div([ React_DOM_Props.className("three column row"), React_DOM_Props.style({
                           height: "33%"
                       }) ])([ React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
-                          marginTop: "1em"
+                          marginTop: "4em"
                       }) ])([ React_DOM.i([ React_DOM_Props.className("caret left icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof LeftDir) {
                               return " flashing";
@@ -3293,7 +3293,7 @@ var PS = {};
                               opacity: 0
                           });
                       })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
-                          marginTop: "1em"
+                          marginTop: "4em"
                       }) ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
                               return " flashing";
