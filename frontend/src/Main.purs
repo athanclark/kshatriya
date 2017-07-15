@@ -99,7 +99,7 @@ spec = T.simpleSpec performAction render
                   , RP.style {height: "33%"}
                   ]
               [ R.div [ RP.className "column"
-                      , RP.style {background: if braking then "#fff" else "rgba(0,0,0,0)"}
+                      , RP.style {background: if braking then "#f00" else "rgba(0,0,0,0)"}
                       ]
                   [ R.h2 [ RP.className "ui center aligned header"
                          , RP.style {color: "#fff"}

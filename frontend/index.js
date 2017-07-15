@@ -3250,7 +3250,7 @@ var PS = {};
                       }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
                           background: (function () {
                               if (v2.braking) {
-                                  return "#fff";
+                                  return "#f00";
                               };
                               return "rgba(0,0,0,0)";
                           })()
