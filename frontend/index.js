@@ -3292,7 +3292,9 @@ var PS = {};
                           return React_DOM_Props.style({
                               opacity: 0
                           });
-                      })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header") ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
+                      })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("column") ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header"), React_DOM_Props.style({
+                          fontSize: "2em"
+                      }) ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
                           marginTop: "4em"
                       }) ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
@@ -3563,7 +3565,7 @@ var PS = {};
                           return v.dispatcher($$this)(v2.value0)();
                       };
                   };
-                  throw new Error("Failed pattern match at Main line 164, column 26 - line 168, column 41: " + [ v2.constructor.name ]);
+                  throw new Error("Failed pattern match at Main line 165, column 26 - line 169, column 41: " + [ v2.constructor.name ]);
               });
           };
           return $108;
