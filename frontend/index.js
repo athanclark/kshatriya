@@ -3171,6 +3171,7 @@ var PS = {};
   var Data_Generic = PS["Data.Generic"];
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Semigroup = PS["Data.Semigroup"];
+  var Data_Semiring = PS["Data.Semiring"];
   var Data_Show = PS["Data.Show"];
   var Data_Unit = PS["Data.Unit"];
   var Prelude = PS["Prelude"];
@@ -3296,7 +3297,7 @@ var PS = {};
                           paddingTop: "4em"
                       }) ])([ React_DOM.h1([ React_DOM_Props.className("ui center aligned header"), React_DOM_Props.style({
                           fontSize: "4em"
-                      }) ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
+                      }) ])([ React_DOM.text(Data_Show.show(Data_Show.showNumber)(v2.speed * 1000.0 * 2.23694) + " mph") ]) ]), React_DOM.div([ React_DOM_Props.className("center aligned column"), React_DOM_Props.style({
                           paddingTop: "4em"
                       }) ])([ React_DOM.i([ React_DOM_Props.className("caret right icon" + (function () {
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
