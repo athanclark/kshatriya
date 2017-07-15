@@ -119,7 +119,7 @@ spec = T.simpleSpec performAction render
                            Just LeftDir -> " flashing"
                            _            -> ""
                         , case turning of
-                            Just LeftDir -> RP.style {color : "#ff0", fontSize: "5em"}
+                            Just LeftDir -> RP.style {color : "#ff0", fontSize: "15em"}
                             _            -> RP.style {opacity: 0}
                         ] []
                   ]
@@ -132,7 +132,7 @@ spec = T.simpleSpec performAction render
                            Just RightDir -> " flashing"
                            _            -> ""
                         , case turning of
-                            Just RightDir -> RP.style {color : "#ff0", fontSize: "5em"}
+                            Just RightDir -> RP.style {color : "#ff0", fontSize: "15em"}
                             _             -> RP.style {opacity: 0}
                         ] []
                   ]

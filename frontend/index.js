@@ -3284,7 +3284,7 @@ var PS = {};
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof LeftDir) {
                               return React_DOM_Props.style({
                                   color: "#ff0", 
-                                  fontSize: "5em"
+                                  fontSize: "15em"
                               });
                           };
                           return React_DOM_Props.style({
@@ -3299,7 +3299,7 @@ var PS = {};
                           if (v2.turning instanceof Data_Maybe.Just && v2.turning.value0 instanceof RightDir) {
                               return React_DOM_Props.style({
                                   color: "#ff0", 
-                                  fontSize: "5em"
+                                  fontSize: "15em"
                               });
                           };
                           return React_DOM_Props.style({
