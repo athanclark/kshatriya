@@ -166,7 +166,7 @@ formatMph speed =
       xs = toCharArray $ show x
       xs' = getWith2Decimals xs
       x' = fromCharArray xs'
-  in  show x' <> " mph"
+  in  x' <> " mph"
 
 
 

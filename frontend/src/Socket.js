@@ -1,8 +1,6 @@
 "use strict";
 
 
-var WebSocket = require('ws');
-
 
 var socket = new WebSocket('ws://localhost:3000');
 
