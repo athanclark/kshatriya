@@ -38,9 +38,8 @@ main = do
         listen' :: forall a b c
                 . GPIOPinAble a
                 => GPIOPinAble b
-                => GPIOPinAble c
                 => a
-                -> Maybe (Either b (Tuple b c))
+                -> Maybe (Either b (Tuple b b))
                 -> Eff ( server  :: SERVER
                        , gpio    :: GPIO
                        , ref     :: REF
@@ -60,7 +59,7 @@ main = do
                 openWrite (toGPIOPin y') q
           f (toGPIOPin x)
 
-    listen' LoSig $ Just $ (Left Lo :: Either Lo (Tuple Lo Lo))
+    listen' LoSig    $ Just $ (Left Lo :: Either Lo (Tuple Lo Lo))
     listen' TurnSigL $ Just $ (Left TurnL :: Either Turn (Tuple Turn Turn))
     listen' TurnSigR $ Just $ (Left TurnR :: Either Turn (Tuple Turn Turn))
     listen' BrakeSig $ Just $ (Right (Tuple BrakeL BrakeR) :: Either BrakeHi (Tuple BrakeHi BrakeHi))

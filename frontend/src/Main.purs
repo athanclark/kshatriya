@@ -27,6 +27,11 @@ import DOM.HTML.Types (htmlElementToElement) as DOM
 import DOM.HTML.Window (document) as DOM
 import Data.Foldable (traverse_)
 
+import Signal (runSignal, sampleOn, constant)
+import Signal.Channel (CHANNEL, Channel, channel, subscribe, send)
+import Signal.Time (debounce, second)
+
+
 
 data Direction
   = LeftDir | RightDir
@@ -176,10 +181,16 @@ mainClass =
       reactSpec = x.spec
   in  R.createClass $ reactSpec
         { componentDidMount = \this -> do
+            zeroChannel <- channel unit
+            let resetter = dispatcher this (ChangedSpeed 0.0)
+            runSignal $ debounce second (subscribe zeroChannel) `sampleOn` (constant resetter)
             on $ \msg -> case decodeJson =<< jsonParser msg of
               Left err -> warn $ "json decoding error: " <> err
               Right incoming -> do
                 log $ "got a message: " <> show (incoming :: Action)
+                case incoming of
+                  ChangedSpeed _ -> send zeroChannel unit
+                  _ -> pure unit
                 dispatcher this incoming
         }
 
@@ -187,10 +198,13 @@ mainClass =
 
 main :: forall eff
       . Eff ( console :: CONSOLE
-            , dom :: DOM
+            , dom     :: DOM
+            , channel :: CHANNEL
             | eff) Unit
 main = do
-  log "Hello sailor!"
+  log "Starting Kshatriya Display"
+
+  zeroChannel <- channel unit
 
   -- T.defaultMain spec initialState unit
   document <- DOM.window >>= DOM.document
