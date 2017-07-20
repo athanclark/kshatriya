@@ -49,8 +49,8 @@ initialState =
   { speed   : 0.0
   , turning : Nothing
   , braking : false
-  , lights  : false
-  , horn    : false
+  , lights  : true
+  , horn    : true
   }
 
 data Action
@@ -152,17 +152,19 @@ spec = T.simpleSpec performAction render
                         ] []
                   ]
               ]
-          , R.div [ RP.className "one column row"
+          , R.div [ RP.className "row"
                   , RP.style {height: "160px", paddingBottom: 0}
                   ]
-              [ R.div [ RP.className "column"
+              [ R.div [RP.className "four wide center aligned column"]
+                  [ R.i [ RP.className "icon volume up"
+                        , if not horn then RP.style {opacity: 0} else RP.style {fontSize: "6em", marginTop: "0.5em"}
+                        ] []
+                  ]
+              , R.div [ RP.className "eight wide column"
                       , RP.style {background: if lights then "#fff" else "rgba(0,0,0,0)"}
                       ]
                   [ R.h2 [RP.className "ui center aligned header", RP.style {marginTop: "2em"}]
                       [R.text $ if lights then "lights" else ""]
-                  , R.i [ RP.className "icon volume up"
-                        , if not horn then RP.style {opacity: 0, float: "left"} else RP.style {fontSize: "10em", float: "left"}
-                        ] []
                   ]
               ]
           ]

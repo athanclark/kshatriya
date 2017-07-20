@@ -3577,8 +3577,8 @@ var PS = {};
       speed: 0.0, 
       turning: Data_Maybe.Nothing.value, 
       braking: false, 
-      lights: false, 
-      horn: false
+      lights: true, 
+      horn: true
   };
   var genericAction = new Data_Generic.Generic(function (v) {
       if (v instanceof Data_Generic.SProd && (v.value0 === "Main.ChangedSpeed" && v.value1.length === 1)) {
@@ -3736,10 +3736,21 @@ var PS = {};
                           return React_DOM_Props.style({
                               opacity: 0
                           });
-                      })() ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("one column row"), React_DOM_Props.style({
+                      })() ])([  ]) ]) ]), React_DOM.div([ React_DOM_Props.className("row"), React_DOM_Props.style({
                           height: "160px", 
                           paddingBottom: 0
-                      }) ])([ React_DOM.div([ React_DOM_Props.className("column"), React_DOM_Props.style({
+                      }) ])([ React_DOM.div([ React_DOM_Props.className("four wide center aligned column") ])([ React_DOM.i([ React_DOM_Props.className("icon volume up"), (function () {
+                          var $69 = !v2.horn;
+                          if ($69) {
+                              return React_DOM_Props.style({
+                                  opacity: 0
+                              });
+                          };
+                          return React_DOM_Props.style({
+                              fontSize: "6em", 
+                              marginTop: "0.5em"
+                          });
+                      })() ])([  ]) ]), React_DOM.div([ React_DOM_Props.className("eight wide column"), React_DOM_Props.style({
                           background: (function () {
                               if (v2.lights) {
                                   return "#fff";
@@ -3753,19 +3764,7 @@ var PS = {};
                               return "lights";
                           };
                           return "";
-                      })()) ]), React_DOM.i([ React_DOM_Props.className("icon volume up"), (function () {
-                          var $71 = !v2.horn;
-                          if ($71) {
-                              return React_DOM_Props.style({
-                                  opacity: 0, 
-                                  "float": "left"
-                              });
-                          };
-                          return React_DOM_Props.style({
-                              fontSize: "10em", 
-                              "float": "left"
-                          });
-                      })() ])([  ]) ]) ]) ]) ];
+                      })()) ]) ]) ]) ]) ];
                   };
               };
           };
@@ -3919,7 +3918,7 @@ var PS = {};
                               return v.dispatcher($$this)(v3.value0)();
                           };
                       };
-                      throw new Error("Failed pattern match at Main line 190, column 26 - line 197, column 41: " + [ v3.constructor.name ]);
+                      throw new Error("Failed pattern match at Main line 192, column 26 - line 199, column 41: " + [ v3.constructor.name ]);
                   })();
               };
           };
