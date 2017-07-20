@@ -64,7 +64,7 @@ instance wheelSigGPIOPinAble :: GPIOPinAble WheelSig where
   toGPIOPin WheelSig = GPIO16
 
 instance hornSigGPIOPinAble :: GPIOPinAble HornSig where
-  toGPIOPin HornSig = GPIO13
+  toGPIOPin HornSig = GPIO6
 
 
 

@@ -121,7 +121,7 @@ var loGPIOPinAble = new GPIOPinAble(function (v) {
     return GPIO.GPIO4.value;
 });
 var hornSigGPIOPinAble = new GPIOPinAble(function (v) {
-    return GPIO.GPIO13.value;
+    return GPIO.GPIO6.value;
 });
 var hornGPIOPinAble = new GPIOPinAble(function (v) {
     return GPIO.GPIO23.value;

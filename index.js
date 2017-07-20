@@ -2069,7 +2069,7 @@ var PS = {};
       return GPIO.GPIO4.value;
   });
   var hornSigGPIOPinAble = new GPIOPinAble(function (v) {
-      return GPIO.GPIO13.value;
+      return GPIO.GPIO6.value;
   });
   var hornGPIOPinAble = new GPIOPinAble(function (v) {
       return GPIO.GPIO23.value;
@@ -2134,6 +2134,7 @@ var PS = {};
 
 
   exports.engageServerImpl = function engageServerImpl (port, onServe, onMessage, websocket) {
+    app.use(express.static('public'));
     app.get("/",function (req,resp) {
       resp.sendFile(__dirname + "/frontend/index.html");
     });
@@ -2145,12 +2146,6 @@ var PS = {};
     });
     app.get("/jquery.min.js",function (req,resp) {
       resp.sendFile(__dirname + "/frontend/jquery.min.js");
-    });
-    app.get("/semantic.min.js",function (req,resp) {
-      resp.sendFile(__dirname + "/frontend/semantic.min.js");
-    });
-    app.get("/semantic.min.css",function (req,resp) {
-      resp.sendFile(__dirname + "/frontend/semantic.min.css");
     });
 
     var server = http.createServer(app);
