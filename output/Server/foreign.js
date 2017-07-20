@@ -1,6 +1,7 @@
 "use strict";
 
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http');
 var WebSocket = require('ws');
 var cors = require('cors');
