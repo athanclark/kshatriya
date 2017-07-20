@@ -49,8 +49,8 @@ initialState =
   { speed   : 0.0
   , turning : Nothing
   , braking : false
-  , lights  : true
-  , horn    : true
+  , lights  : false
+  , horn    : false
   }
 
 data Action

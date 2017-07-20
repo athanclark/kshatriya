@@ -3577,8 +3577,8 @@ var PS = {};
       speed: 0.0, 
       turning: Data_Maybe.Nothing.value, 
       braking: false, 
-      lights: true, 
-      horn: true
+      lights: false, 
+      horn: false
   };
   var genericAction = new Data_Generic.Generic(function (v) {
       if (v instanceof Data_Generic.SProd && (v.value0 === "Main.ChangedSpeed" && v.value1.length === 1)) {
