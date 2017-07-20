@@ -3484,6 +3484,7 @@ var PS = {};
   var Data_Function = PS["Data.Function"];
   var Data_Functor = PS["Data.Functor"];
   var Data_Generic = PS["Data.Generic"];
+  var Data_HeytingAlgebra = PS["Data.HeytingAlgebra"];
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Semigroup = PS["Data.Semigroup"];
   var Data_Semiring = PS["Data.Semiring"];
@@ -3753,13 +3754,16 @@ var PS = {};
                           };
                           return "";
                       })()) ]), React_DOM.i([ React_DOM_Props.className("icon volume up"), (function () {
-                          if (v2.horn) {
+                          var $71 = !v2.horn;
+                          if ($71) {
                               return React_DOM_Props.style({
-                                  opacity: 0
+                                  opacity: 0, 
+                                  "float": "left"
                               });
                           };
                           return React_DOM_Props.style({
-                              fontSize: "10em"
+                              fontSize: "10em", 
+                              "float": "left"
                           });
                       })() ])([  ]) ]) ]) ]) ];
                   };

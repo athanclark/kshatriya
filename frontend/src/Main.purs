@@ -161,7 +161,7 @@ spec = T.simpleSpec performAction render
                   [ R.h2 [RP.className "ui center aligned header", RP.style {marginTop: "2em"}]
                       [R.text $ if lights then "lights" else ""]
                   , R.i [ RP.className "icon volume up"
-                        , if horn then RP.style {opacity: 0} else RP.style {fontSize: "10em"}
+                        , if not horn then RP.style {opacity: 0, float: "left"} else RP.style {fontSize: "10em", float: "left"}
                         ] []
                   ]
               ]
