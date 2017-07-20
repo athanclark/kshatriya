@@ -18,6 +18,15 @@ exports.engageServerImpl = function engageServerImpl (port, onServe, onMessage, 
   app.get("/style.css",function (req,resp) {
     // resp.sendFile(__dirname + "/frontend/index.js");
   });
+  app.get("/jquery.min.js",function (req,resp) {
+    resp.sendFile(__dirname + "/frontend/jquery.min.js");
+  });
+  app.get("/semantic.min.js",function (req,resp) {
+    resp.sendFile(__dirname + "/frontend/semantic.min.js");
+  });
+  app.get("/semantic.min.css",function (req,resp) {
+    resp.sendFile(__dirname + "/frontend/semantic.min.css");
+  });
 
   var server = http.createServer(app);
 
