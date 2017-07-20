@@ -3752,7 +3752,16 @@ var PS = {};
                               return "lights";
                           };
                           return "";
-                      })()) ]) ]) ]) ]) ];
+                      })()) ]), React_DOM.i([ React_DOM_Props.className("icon volume up"), (function () {
+                          if (v2.horn) {
+                              return React_DOM_Props.style({
+                                  opacity: 0
+                              });
+                          };
+                          return React_DOM_Props.style({
+                              fontSize: "10em"
+                          });
+                      })() ])([  ]) ]) ]) ]) ];
                   };
               };
           };
@@ -3906,7 +3915,7 @@ var PS = {};
                               return v.dispatcher($$this)(v3.value0)();
                           };
                       };
-                      throw new Error("Failed pattern match at Main line 187, column 26 - line 194, column 41: " + [ v3.constructor.name ]);
+                      throw new Error("Failed pattern match at Main line 190, column 26 - line 197, column 41: " + [ v3.constructor.name ]);
                   })();
               };
           };
@@ -3915,12 +3924,11 @@ var PS = {};
   })();
   var main = function __do() {
       Control_Monad_Eff_Console.log("Starting Kshatriya Display")();
-      var v = Signal_Channel.channel(Data_Unit.unit)();
-      var v1 = Control_Bind.bind(Control_Monad_Eff.bindEff)(DOM_HTML.window)(DOM_HTML_Window.document)();
-      var v2 = DOM_HTML_Document.body(v1)();
-      return Data_Foldable.traverse_(Control_Monad_Eff.applicativeEff)(Data_Foldable.foldableMaybe)(function ($120) {
-          return ReactDOM.render(React.createFactory(mainClass)(Data_Unit.unit))(DOM_HTML_Types.htmlElementToElement($120));
-      })(v2)();
+      var v = Control_Bind.bind(Control_Monad_Eff.bindEff)(DOM_HTML.window)(DOM_HTML_Window.document)();
+      var v1 = DOM_HTML_Document.body(v)();
+      return Data_Foldable.traverse_(Control_Monad_Eff.applicativeEff)(Data_Foldable.foldableMaybe)(function ($119) {
+          return ReactDOM.render(React.createFactory(mainClass)(Data_Unit.unit))(DOM_HTML_Types.htmlElementToElement($119));
+      })(v1)();
   };
   exports["ChangedSpeed"] = ChangedSpeed;
   exports["TurningLeft"] = TurningLeft;

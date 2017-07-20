@@ -160,6 +160,9 @@ spec = T.simpleSpec performAction render
                       ]
                   [ R.h2 [RP.className "ui center aligned header", RP.style {marginTop: "2em"}]
                       [R.text $ if lights then "lights" else ""]
+                  , R.i [ RP.className "icon volume up"
+                        , if horn then RP.style {opacity: 0} else RP.style {fontSize: "10em"}
+                        ] []
                   ]
               ]
           ]
@@ -203,8 +206,6 @@ main :: forall eff
             | eff) Unit
 main = do
   log "Starting Kshatriya Display"
-
-  zeroChannel <- channel unit
 
   -- T.defaultMain spec initialState unit
   document <- DOM.window >>= DOM.document
