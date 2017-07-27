@@ -63,9 +63,15 @@ main = do
     listen' LoSig    $ Just $ (Left Lo :: Either Lo (Tuple Lo Lo))
     listen' TurnSigL $ Just $ (Left TurnL :: Either Turn (Tuple Turn Turn))
     listen' TurnSigR $ Just $ (Left TurnR :: Either Turn (Tuple Turn Turn))
-    listen' BrakeSig $ Just $ (Right (Tuple BrakeL BrakeR) :: Either BrakeHi (Tuple BrakeHi BrakeHi))
     listen' WheelSig (Nothing :: Maybe (Either Lo (Tuple Lo Lo)))
     listen' HornSig  $ Just $ (Left Horn :: Either Horn (Tuple Horn Horn))
+    listen (toGPIOPin BrakeSig) f
+    q <- read (toGPIOPin BrakeSig)
+    openWrite (toGPIOPin BrakeL) q
+    openWrite (toGPIOPin BrakeR) q
+    openWrite (toGPIOPin FrontEABS) q
+    openWrite (toGPIOPin BackEABS) q
+    f (toGPIOPin BrakeSig)
 
     log "GPIO Pins Ready"
 
