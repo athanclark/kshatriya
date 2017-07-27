@@ -17,6 +17,12 @@ data BrakeHi
 
 data Horn = Horn
 
+data FrontEABS = FrontEABS
+
+data BackEABS = BackEABS
+
+
+
 data LoSig = LoSig
 
 data TurnSig
@@ -48,6 +54,13 @@ instance brakeGPIOPinAble :: GPIOPinAble BrakeHi where
 
 instance hornGPIOPinAble :: GPIOPinAble Horn where
   toGPIOPin Horn = GPIO23
+
+instance frontEABSGPIOPinAble :: GPIOPinAble FrontEABS where
+  toGPIOPin FrontEABS = GPIO24
+
+instance backEABSGPIOPinAble :: GPIOPinAble BackEABS where
+  toGPIOPin BackEABS = GPIO25
+
 
 
 instance loSigGPIOPinAble :: GPIOPinAble LoSig where

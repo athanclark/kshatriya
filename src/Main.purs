@@ -2,7 +2,7 @@ module Main where
 
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
-import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius, Horn (..), HornSig (..))
+import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius, Horn (..), HornSig (..), FrontEABS (..), BackEABS (..))
 import Server (SERVER, engageServer)
 import WebSocket (Outgoing (..), onReceive)
 
@@ -174,17 +174,20 @@ pinCallback dispatchWS stateRef pin
                  dispatchWS NoTurn
                _ -> pure unit
   | pin == toGPIOPin BrakeSig = do
-      on <- read (toGPIOPin BrakeSig)
+      on' <- read (toGPIOPin BrakeSig)
+      let on = not on'
       log $ "Brake signal: " <> show on
-      modifyRef stateRef $ _ {braking = not on}
-      dispatchWS $ ChangedBraking $ not on
+      modifyRef stateRef $ _ {braking = on}
+      dispatchWS $ ChangedBraking on
       {leftBlinker,rightBlinker} <- readRef stateRef
       case leftBlinker of
-        Nothing -> write (toGPIOPin BrakeL) $ not on
+        Nothing -> write (toGPIOPin BrakeL) on
         _       -> pure unit
       case rightBlinker of
-        Nothing -> write (toGPIOPin BrakeR) $ not on
+        Nothing -> write (toGPIOPin BrakeR) on
         _       -> pure unit
+      write (toGPIOPin FrontEABS) on
+      write (toGPIOPin BackEABS) on
   | pin == toGPIOPin HornSig = do
       on <- read (toGPIOPin HornSig)
       log $ "Horn signal: " <> show on

@@ -65,6 +65,13 @@ var Horn = (function () {
     Horn.value = new Horn();
     return Horn;
 })();
+var FrontEABS = (function () {
+    function FrontEABS() {
+
+    };
+    FrontEABS.value = new FrontEABS();
+    return FrontEABS;
+})();
 var BrakeSig = (function () {
     function BrakeSig() {
 
@@ -86,6 +93,13 @@ var BrakeR = (function () {
     BrakeR.value = new BrakeR();
     return BrakeR;
 })();
+var BackEABS = (function () {
+    function BackEABS() {
+
+    };
+    BackEABS.value = new BackEABS();
+    return BackEABS;
+})();
 var GPIOPinAble = function (toGPIOPin) {
     this.toGPIOPin = toGPIOPin;
 };
@@ -100,7 +114,7 @@ var turnSigGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnSigR) {
         return GPIO.GPIO20.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 56, column 1 - line 56, column 51: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 69, column 1 - line 69, column 51: " + [ v.constructor.name ]);
 });
 var turnGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnL) {
@@ -109,7 +123,7 @@ var turnGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof TurnR) {
         return GPIO.GPIO18.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 41, column 1 - line 41, column 45: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 47, column 1 - line 47, column 45: " + [ v.constructor.name ]);
 });
 var toGPIOPin = function (dict) {
     return dict.toGPIOPin;
@@ -126,6 +140,9 @@ var hornSigGPIOPinAble = new GPIOPinAble(function (v) {
 var hornGPIOPinAble = new GPIOPinAble(function (v) {
     return GPIO.GPIO23.value;
 });
+var frontEABSGPIOPinAble = new GPIOPinAble(function (v) {
+    return GPIO.GPIO24.value;
+});
 var brakeSigGPIOPinAble = new GPIOPinAble(function (v) {
     return GPIO.GPIO19.value;
 });
@@ -136,12 +153,17 @@ var brakeGPIOPinAble = new GPIOPinAble(function (v) {
     if (v instanceof BrakeR) {
         return GPIO.GPIO22.value;
     };
-    throw new Error("Failed pattern match at Kshatriya line 45, column 1 - line 45, column 49: " + [ v.constructor.name ]);
+    throw new Error("Failed pattern match at Kshatriya line 51, column 1 - line 51, column 49: " + [ v.constructor.name ]);
+});
+var backEABSGPIOPinAble = new GPIOPinAble(function (v) {
+    return GPIO.GPIO25.value;
 });
 module.exports = {
+    BackEABS: BackEABS, 
     BrakeL: BrakeL, 
     BrakeR: BrakeR, 
     BrakeSig: BrakeSig, 
+    FrontEABS: FrontEABS, 
     Horn: Horn, 
     HornSig: HornSig, 
     Lo: Lo, 
@@ -158,6 +180,8 @@ module.exports = {
     turnGPIOPinAble: turnGPIOPinAble, 
     brakeGPIOPinAble: brakeGPIOPinAble, 
     hornGPIOPinAble: hornGPIOPinAble, 
+    frontEABSGPIOPinAble: frontEABSGPIOPinAble, 
+    backEABSGPIOPinAble: backEABSGPIOPinAble, 
     loSigGPIOPinAble: loSigGPIOPinAble, 
     turnSigGPIOPinAble: turnSigGPIOPinAble, 
     brakeSigGPIOPinAble: brakeSigGPIOPinAble, 

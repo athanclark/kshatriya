@@ -167,7 +167,8 @@ var pinCallback = function (dispatchWS) {
             if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))) {
                 return function __do() {
                     var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
-                    Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
+                    var on = !v;
+                    Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(on))();
                     Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
                         var $76 = {};
                         for (var $77 in v1) {
@@ -175,21 +176,25 @@ var pinCallback = function (dispatchWS) {
                                 $76[$77] = v1[$77];
                             };
                         };
-                        $76.braking = !v;
+                        $76.braking = on;
                         return $76;
                     })();
-                    dispatchWS(WebSocket.ChangedBraking.create(!v))();
+                    dispatchWS(new WebSocket.ChangedBraking(on))();
                     var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
                     (function () {
                         if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
-                            return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(!v);
+                            return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(on);
                         };
                         return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
                     })()();
-                    if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
-                        return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(!v)();
-                    };
-                    return Data_Unit.unit;
+                    (function () {
+                        if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
+                            return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(on);
+                        };
+                        return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
+                    })()();
+                    GPIO.write(Kshatriya.toGPIOPin(Kshatriya.frontEABSGPIOPinAble)(Kshatriya.FrontEABS.value))(on)();
+                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.backEABSGPIOPinAble)(Kshatriya.BackEABS.value))(on)();
                 };
             };
             if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.hornSigGPIOPinAble)(Kshatriya.HornSig.value))) {
@@ -270,14 +275,14 @@ var pinCallback = function (dispatchWS) {
                                         })();
                                     })();
                                 };
-                                throw new Error("Failed pattern match at Main line 215, column 19 - line 235, column 48: " + [ v1.wheel.lastSpeed.constructor.name ]);
+                                throw new Error("Failed pattern match at Main line 218, column 19 - line 238, column 48: " + [ v1.wheel.lastSpeed.constructor.name ]);
                             };
-                            throw new Error("Failed pattern match at Main line 200, column 29 - line 235, column 48: " + [ v1.wheel.lastHit.constructor.name ]);
+                            throw new Error("Failed pattern match at Main line 203, column 29 - line 238, column 48: " + [ v1.wheel.lastHit.constructor.name ]);
                         };
                         if (v1.wheel.sensor instanceof HitSensor) {
                             return Data_Unit.unit;
                         };
-                        throw new Error("Failed pattern match at Main line 199, column 18 - line 236, column 37: " + [ v1.wheel.sensor.constructor.name ]);
+                        throw new Error("Failed pattern match at Main line 202, column 18 - line 239, column 37: " + [ v1.wheel.sensor.constructor.name ]);
                     };
                     if (v1.wheel.sensor instanceof LeftSensor) {
                         return Data_Unit.unit;
@@ -303,7 +308,7 @@ var pinCallback = function (dispatchWS) {
                             return $110;
                         })();
                     };
-                    throw new Error("Failed pattern match at Main line 237, column 18 - line 240, column 70: " + [ v1.wheel.sensor.constructor.name ]);
+                    throw new Error("Failed pattern match at Main line 240, column 18 - line 243, column 70: " + [ v1.wheel.sensor.constructor.name ]);
                 };
             };
             if (Data_Boolean.otherwise) {
