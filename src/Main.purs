@@ -12,6 +12,7 @@ import Data.Tuple (Tuple (..))
 import Data.Argonaut (encodeJson)
 import Data.Time.Duration (Milliseconds (..))
 import Data.DateTime.Instant (unInstant)
+import Control.Monad (when)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Console (CONSOLE, log)
 import Control.Monad.Eff.Ref (REF, Ref, newRef, modifyRef, readRef)
@@ -175,14 +176,14 @@ pinCallback dispatchWS stateRef pin
   | pin == toGPIOPin BrakeSig = do
       on <- read (toGPIOPin BrakeSig)
       log $ "Brake signal: " <> show on
-      modifyRef stateRef $ _ {braking = on}
-      dispatchWS $ ChangedBraking on
+      modifyRef stateRef $ _ {braking = not on}
+      dispatchWS $ ChangedBraking $ not on
       {leftBlinker,rightBlinker} <- readRef stateRef
       case leftBlinker of
-        Nothing -> write (toGPIOPin BrakeL) on
+        Nothing -> write (toGPIOPin BrakeL) $ not on
         _       -> pure unit
       case rightBlinker of
-        Nothing -> write (toGPIOPin BrakeR) on
+        Nothing -> write (toGPIOPin BrakeR) $ not on
         _       -> pure unit
   | pin == toGPIOPin HornSig = do
       on <- read (toGPIOPin HornSig)
@@ -215,21 +216,23 @@ pinCallback dispatchWS stateRef pin
                     Nothing -> do
                       let spd_ = (3.0 / 4.0) * spd
                       log $ "New speed: " <> show spd_
-                      dispatchWS $ ChangedSpeed spd_
-                      modifyRef stateRef $ _ { wheel = { lastHit : Just x
-                                                      , lastSpeed : Just spd_
-                                                      , sensor : HitSensor
-                                                      }
-                                            }
+                      when (spd_ * 1000.0 * 2.23694 <= 50.0) $ do
+                        dispatchWS $ ChangedSpeed spd_
+                        modifyRef stateRef $ _ { wheel = { lastHit : Just x
+                                                        , lastSpeed : Just spd_
+                                                        , sensor : HitSensor
+                                                        }
+                                              }
                     Just spd' -> do
                       let spd_ = ((3.0 / 4.0) * (spd - spd')) + spd'
                       log $ "New speed: " <> show spd'
-                      dispatchWS $ ChangedSpeed spd_
-                      modifyRef stateRef $ _ { wheel = { lastHit : Just x
-                                                      , lastSpeed : Just spd_
-                                                      , sensor : HitSensor
-                                                      }
-                                            }
+                      when (spd_ * 1000.0 * 2.23694 <= 50.0) $ do
+                        dispatchWS $ ChangedSpeed spd_
+                        modifyRef stateRef $ _ { wheel = { lastHit : Just x
+                                                        , lastSpeed : Just spd_
+                                                        , sensor : HitSensor
+                                                        }
+                                              }
               HitSensor -> pure unit
             else case sensor of
               LeftSensor -> pure unit
