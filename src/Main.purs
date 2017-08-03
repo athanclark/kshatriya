@@ -2,7 +2,7 @@ module Main where
 
 import Prelude
 import GPIO (GPIO, GPIOPin, openWrite, write, read, listen, sleep)
-import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius, Horn (..), HornSig (..), FrontEABS (..), BackEABS (..))
+import Kshatriya (toGPIOPin, class GPIOPinAble, Lo (..), LoSig (..), Turn (..), TurnSig (..), BrakeHi (..), BrakeSig (..), WheelSig (..), wheelRadius)
 import Server (SERVER, engageServer)
 import WebSocket (Outgoing (..), onReceive)
 
@@ -64,14 +64,15 @@ main = do
     listen' TurnSigL $ Just $ (Left TurnL :: Either Turn (Tuple Turn Turn))
     listen' TurnSigR $ Just $ (Left TurnR :: Either Turn (Tuple Turn Turn))
     listen' WheelSig (Nothing :: Maybe (Either Lo (Tuple Lo Lo)))
-    listen' HornSig  $ Just $ (Left Horn :: Either Horn (Tuple Horn Horn))
-    listen (toGPIOPin BrakeSig) f
-    q <- read (toGPIOPin BrakeSig)
-    openWrite (toGPIOPin BrakeL) q
-    openWrite (toGPIOPin BrakeR) q
-    openWrite (toGPIOPin FrontEABS) q
-    openWrite (toGPIOPin BackEABS) q
-    f (toGPIOPin BrakeSig)
+    listen (toGPIOPin BrakeSigL) f
+    listen (toGPIOPin BrakeSigR) f
+    l <- read (toGPIOPin BrakeSigL)
+    r <- read (toGPIOPin BrakeSigR)
+    openWrite (toGPIOPin BrakeL) (l || r)
+    openWrite (toGPIOPin BrakeR) (l || r)
+    openWrite (toGPIOPin BrakeBoth) (l || r)
+    f (toGPIOPin BrakeSigL)
+    f (toGPIOPin BrakeSigR)
 
     log "GPIO Pins Ready"
 
@@ -179,10 +180,13 @@ pinCallback dispatchWS stateRef pin
                  write (toGPIOPin BrakeR) braking
                  dispatchWS NoTurn
                _ -> pure unit
-  | pin == toGPIOPin BrakeSig = do
-      on' <- read (toGPIOPin BrakeSig)
-      let on = not on'
-      log $ "Brake signal: " <> show on
+  | pin == toGPIOPin BrakeSigL || pin == toGPIOPin BrakeSigR = do
+      onL' <- read (toGPIOPin BrakeSigL)
+      onR' <- read (toGPIOPin BrakeSigR)
+      let onL = not onL'
+          onR = not onR'
+          on = onL || onR
+      log $ "Brake signals: " <> show onL <> " " <> show onR
       modifyRef stateRef $ _ {braking = on}
       dispatchWS $ ChangedBraking on
       {leftBlinker,rightBlinker} <- readRef stateRef
@@ -192,13 +196,7 @@ pinCallback dispatchWS stateRef pin
       case rightBlinker of
         Nothing -> write (toGPIOPin BrakeR) on
         _       -> pure unit
-      write (toGPIOPin FrontEABS) on
-      write (toGPIOPin BackEABS) on
-  | pin == toGPIOPin HornSig = do
-      on <- read (toGPIOPin HornSig)
-      log $ "Horn signal: " <> show on
-      dispatchWS $ ChangedHorn on
-      write (toGPIOPin Horn) on
+      write (toGPIOPin BrakeBoth) on
   | pin == toGPIOPin WheelSig = do
       on <- read (toGPIOPin WheelSig)
       {wheel} <- readRef stateRef

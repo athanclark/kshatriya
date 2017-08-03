@@ -58,14 +58,14 @@ var pinCallback = function (dispatchWS) {
                     Control_Monad_Eff_Console.log("Low signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
                     GPIO.write(Kshatriya.toGPIOPin(Kshatriya.loGPIOPinAble)(Kshatriya.Lo.value))(v)();
                     Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
-                        var $39 = {};
-                        for (var $40 in v1) {
-                            if ({}.hasOwnProperty.call(v1, $40)) {
-                                $39[$40] = v1[$40];
+                        var $40 = {};
+                        for (var $41 in v1) {
+                            if ({}.hasOwnProperty.call(v1, $41)) {
+                                $40[$41] = v1[$41];
                             };
                         };
-                        $39.lights = v;
-                        return $39;
+                        $40.lights = v;
+                        return $40;
                     })();
                     return dispatchWS(new WebSocket.ChangedLights(v))();
                 };
@@ -85,14 +85,14 @@ var pinCallback = function (dispatchWS) {
                                 return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v3)();
                             })();
                             Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                                var $49 = {};
-                                for (var $50 in v4) {
-                                    if ({}.hasOwnProperty.call(v4, $50)) {
-                                        $49[$50] = v4[$50];
+                                var $50 = {};
+                                for (var $51 in v4) {
+                                    if ({}.hasOwnProperty.call(v4, $51)) {
+                                        $50[$51] = v4[$51];
                                     };
                                 };
-                                $49.leftBlinker = new Data_Maybe.Just(v3);
-                                return $49;
+                                $50.leftBlinker = new Data_Maybe.Just(v3);
+                                return $50;
                             })();
                             return dispatchWS(WebSocket.TurnLeft.value)();
                         };
@@ -101,14 +101,14 @@ var pinCallback = function (dispatchWS) {
                     if (v1.leftBlinker instanceof Data_Maybe.Just) {
                         Control_Monad_Eff_Timer.clearInterval(v1.leftBlinker.value0)();
                         Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
-                            var $53 = {};
-                            for (var $54 in v2) {
-                                if ({}.hasOwnProperty.call(v2, $54)) {
-                                    $53[$54] = v2[$54];
+                            var $54 = {};
+                            for (var $55 in v2) {
+                                if ({}.hasOwnProperty.call(v2, $55)) {
+                                    $54[$55] = v2[$55];
                                 };
                             };
-                            $53.leftBlinker = Data_Maybe.Nothing.value;
-                            return $53;
+                            $54.leftBlinker = Data_Maybe.Nothing.value;
+                            return $54;
                         })();
                         GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnL.value))(false)();
                         GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1.braking)();
@@ -132,14 +132,14 @@ var pinCallback = function (dispatchWS) {
                                 return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v3)();
                             })();
                             Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                                var $66 = {};
-                                for (var $67 in v4) {
-                                    if ({}.hasOwnProperty.call(v4, $67)) {
-                                        $66[$67] = v4[$67];
+                                var $67 = {};
+                                for (var $68 in v4) {
+                                    if ({}.hasOwnProperty.call(v4, $68)) {
+                                        $67[$68] = v4[$68];
                                     };
                                 };
-                                $66.rightBlinker = new Data_Maybe.Just(v3);
-                                return $66;
+                                $67.rightBlinker = new Data_Maybe.Just(v3);
+                                return $67;
                             })();
                             return dispatchWS(WebSocket.TurnRight.value)();
                         };
@@ -148,14 +148,14 @@ var pinCallback = function (dispatchWS) {
                     if (v1.rightBlinker instanceof Data_Maybe.Just) {
                         Control_Monad_Eff_Timer.clearInterval(v1.rightBlinker.value0)();
                         Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
-                            var $70 = {};
-                            for (var $71 in v2) {
-                                if ({}.hasOwnProperty.call(v2, $71)) {
-                                    $70[$71] = v2[$71];
+                            var $71 = {};
+                            for (var $72 in v2) {
+                                if ({}.hasOwnProperty.call(v2, $72)) {
+                                    $71[$72] = v2[$72];
                                 };
                             };
-                            $70.rightBlinker = Data_Maybe.Nothing.value;
-                            return $70;
+                            $71.rightBlinker = Data_Maybe.Nothing.value;
+                            return $71;
                         })();
                         GPIO.write(Kshatriya.toGPIOPin(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnR.value))(false)();
                         GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1.braking)();
@@ -164,45 +164,39 @@ var pinCallback = function (dispatchWS) {
                     return Data_Unit.unit;
                 };
             };
-            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))) {
+            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigL.value)) || Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigR.value))) {
                 return function __do() {
-                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
-                    var on = !v;
-                    Control_Monad_Eff_Console.log("Brake signal: " + Data_Show.show(Data_Show.showBoolean)(on))();
-                    Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v1) {
-                        var $77 = {};
-                        for (var $78 in v1) {
-                            if ({}.hasOwnProperty.call(v1, $78)) {
-                                $77[$78] = v1[$78];
+                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigL.value))();
+                    var v1 = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigR.value))();
+                    var onR = !v1;
+                    var onL = !v;
+                    var on = onL || onR;
+                    Control_Monad_Eff_Console.log("Brake signals: " + (Data_Show.show(Data_Show.showBoolean)(onL) + (" " + Data_Show.show(Data_Show.showBoolean)(onR))))();
+                    Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v2) {
+                        var $79 = {};
+                        for (var $80 in v2) {
+                            if ({}.hasOwnProperty.call(v2, $80)) {
+                                $79[$80] = v2[$80];
                             };
                         };
-                        $77.braking = on;
-                        return $77;
+                        $79.braking = on;
+                        return $79;
                     })();
                     dispatchWS(new WebSocket.ChangedBraking(on))();
-                    var v1 = Control_Monad_Eff_Ref.readRef(stateRef)();
+                    var v2 = Control_Monad_Eff_Ref.readRef(stateRef)();
                     (function () {
-                        if (v1.leftBlinker instanceof Data_Maybe.Nothing) {
+                        if (v2.leftBlinker instanceof Data_Maybe.Nothing) {
                             return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(on);
                         };
                         return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
                     })()();
                     (function () {
-                        if (v1.rightBlinker instanceof Data_Maybe.Nothing) {
+                        if (v2.rightBlinker instanceof Data_Maybe.Nothing) {
                             return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(on);
                         };
                         return Control_Applicative.pure(Control_Monad_Eff.applicativeEff)(Data_Unit.unit);
                     })()();
-                    GPIO.write(Kshatriya.toGPIOPin(Kshatriya.frontEABSGPIOPinAble)(Kshatriya.FrontEABS.value))(on)();
-                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.backEABSGPIOPinAble)(Kshatriya.BackEABS.value))(on)();
-                };
-            };
-            if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.hornSigGPIOPinAble)(Kshatriya.HornSig.value))) {
-                return function __do() {
-                    var v = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.hornSigGPIOPinAble)(Kshatriya.HornSig.value))();
-                    Control_Monad_Eff_Console.log("Horn signal: " + Data_Show.show(Data_Show.showBoolean)(v))();
-                    dispatchWS(new WebSocket.ChangedHorn(v))();
-                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.hornGPIOPinAble)(Kshatriya.Horn.value))(v)();
+                    return GPIO.write(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeBoth.value))(on)();
                 };
             };
             if (Data_Eq.eq(GPIO.eqGPIOPin)(pin)(Kshatriya.toGPIOPin(Kshatriya.wheelSigGPIOPinAble)(Kshatriya.WheelSig.value))) {
@@ -214,18 +208,18 @@ var pinCallback = function (dispatchWS) {
                             if (v1.wheel.lastHit instanceof Data_Maybe.Nothing) {
                                 var v2 = Data_Functor.map(Control_Monad_Eff.functorEff)(Data_DateTime_Instant.unInstant)(Control_Monad_Eff_Now.now)();
                                 return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v3) {
-                                    var $93 = {};
-                                    for (var $94 in v3) {
-                                        if ({}.hasOwnProperty.call(v3, $94)) {
-                                            $93[$94] = v3[$94];
+                                    var $94 = {};
+                                    for (var $95 in v3) {
+                                        if ({}.hasOwnProperty.call(v3, $95)) {
+                                            $94[$95] = v3[$95];
                                         };
                                     };
-                                    $93.wheel = {
+                                    $94.wheel = {
                                         sensor: HitSensor.value, 
                                         lastHit: new Data_Maybe.Just(v2), 
                                         lastSpeed: Data_Maybe.Nothing.value
                                     };
-                                    return $93;
+                                    return $94;
                                 })();
                             };
                             if (v1.wheel.lastHit instanceof Data_Maybe.Just) {
@@ -239,18 +233,18 @@ var pinCallback = function (dispatchWS) {
                                     return Control_Applicative.when(Control_Monad_Eff.applicativeEff)(spd_ * 1000.0 * 2.23694 <= 50.0)(function __do() {
                                         dispatchWS(new WebSocket.ChangedSpeed(spd_))();
                                         return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                                            var $99 = {};
-                                            for (var $100 in v4) {
-                                                if ({}.hasOwnProperty.call(v4, $100)) {
-                                                    $99[$100] = v4[$100];
+                                            var $100 = {};
+                                            for (var $101 in v4) {
+                                                if ({}.hasOwnProperty.call(v4, $101)) {
+                                                    $100[$101] = v4[$101];
                                                 };
                                             };
-                                            $99.wheel = {
+                                            $100.wheel = {
                                                 lastHit: new Data_Maybe.Just(v2), 
                                                 lastSpeed: new Data_Maybe.Just(spd_), 
                                                 sensor: HitSensor.value
                                             };
-                                            return $99;
+                                            return $100;
                                         })();
                                     })();
                                 };
@@ -260,61 +254,61 @@ var pinCallback = function (dispatchWS) {
                                     return Control_Applicative.when(Control_Monad_Eff.applicativeEff)(spd_ * 1000.0 * 2.23694 <= 50.0)(function __do() {
                                         dispatchWS(new WebSocket.ChangedSpeed(spd_))();
                                         return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (v4) {
-                                            var $102 = {};
-                                            for (var $103 in v4) {
-                                                if ({}.hasOwnProperty.call(v4, $103)) {
-                                                    $102[$103] = v4[$103];
+                                            var $103 = {};
+                                            for (var $104 in v4) {
+                                                if ({}.hasOwnProperty.call(v4, $104)) {
+                                                    $103[$104] = v4[$104];
                                                 };
                                             };
-                                            $102.wheel = {
+                                            $103.wheel = {
                                                 lastHit: new Data_Maybe.Just(v2), 
                                                 lastSpeed: new Data_Maybe.Just(spd_), 
                                                 sensor: HitSensor.value
                                             };
-                                            return $102;
+                                            return $103;
                                         })();
                                     })();
                                 };
-                                throw new Error("Failed pattern match at Main line 224, column 19 - line 244, column 48: " + [ v1.wheel.lastSpeed.constructor.name ]);
+                                throw new Error("Failed pattern match at Main line 222, column 19 - line 242, column 48: " + [ v1.wheel.lastSpeed.constructor.name ]);
                             };
-                            throw new Error("Failed pattern match at Main line 209, column 29 - line 244, column 48: " + [ v1.wheel.lastHit.constructor.name ]);
+                            throw new Error("Failed pattern match at Main line 207, column 29 - line 242, column 48: " + [ v1.wheel.lastHit.constructor.name ]);
                         };
                         if (v1.wheel.sensor instanceof HitSensor) {
                             return Data_Unit.unit;
                         };
-                        throw new Error("Failed pattern match at Main line 208, column 18 - line 245, column 37: " + [ v1.wheel.sensor.constructor.name ]);
+                        throw new Error("Failed pattern match at Main line 206, column 18 - line 243, column 37: " + [ v1.wheel.sensor.constructor.name ]);
                     };
                     if (v1.wheel.sensor instanceof LeftSensor) {
                         return Data_Unit.unit;
                     };
                     if (v1.wheel.sensor instanceof HitSensor) {
                         return Control_Monad_Eff_Ref.modifyRef(stateRef)(function (state) {
-                            var $111 = {};
-                            for (var $112 in state) {
-                                if ({}.hasOwnProperty.call(state, $112)) {
-                                    $111[$112] = state[$112];
+                            var $112 = {};
+                            for (var $113 in state) {
+                                if ({}.hasOwnProperty.call(state, $113)) {
+                                    $112[$113] = state[$113];
                                 };
                             };
-                            $111.wheel = (function () {
-                                var $108 = {};
-                                for (var $109 in state.wheel) {
-                                    if ({}.hasOwnProperty.call(state.wheel, $109)) {
-                                        $108[$109] = state["wheel"][$109];
+                            $112.wheel = (function () {
+                                var $109 = {};
+                                for (var $110 in state.wheel) {
+                                    if ({}.hasOwnProperty.call(state.wheel, $110)) {
+                                        $109[$110] = state["wheel"][$110];
                                     };
                                 };
-                                $108.sensor = LeftSensor.value;
-                                return $108;
+                                $109.sensor = LeftSensor.value;
+                                return $109;
                             })();
-                            return $111;
+                            return $112;
                         })();
                     };
-                    throw new Error("Failed pattern match at Main line 246, column 18 - line 249, column 70: " + [ v1.wheel.sensor.constructor.name ]);
+                    throw new Error("Failed pattern match at Main line 244, column 18 - line 247, column 70: " + [ v1.wheel.sensor.constructor.name ]);
                 };
             };
             if (Data_Boolean.otherwise) {
                 return Control_Monad_Eff_Console.log("!?!");
             };
-            throw new Error("Failed pattern match at Main line 112, column 1 - line 126, column 31: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
+            throw new Error("Failed pattern match at Main line 113, column 1 - line 127, column 31: " + [ dispatchWS.constructor.name, stateRef.constructor.name, pin.constructor.name ]);
         };
     };
 };
@@ -334,8 +328,8 @@ var main = function __do() {
     return Server.engageServer(3000)(Control_Monad_Eff_Console.log("server started"))(WebSocket.onReceive)(function (send) {
         return function __do() {
             var v = Control_Monad_Eff_Ref.newRef(initialState)();
-            var f = pinCallback(function ($128) {
-                return send(Data_Show.show(Data_Argonaut_Core.showJson)(Data_Argonaut_Encode_Class.encodeJson(WebSocket.encodeJsonOutgoing)($128)));
+            var f = pinCallback(function ($130) {
+                return send(Data_Show.show(Data_Argonaut_Core.showJson)(Data_Argonaut_Encode_Class.encodeJson(WebSocket.encodeJsonOutgoing)($130)));
             })(v);
             var listen$prime = function (dictGPIOPinAble) {
                 return function (dictGPIOPinAble1) {
@@ -372,14 +366,15 @@ var main = function __do() {
             listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnSigL.value)(Data_Maybe.Just.create(new Data_Either.Left(Kshatriya.TurnL.value)))();
             listen$prime(Kshatriya.turnSigGPIOPinAble)(Kshatriya.turnGPIOPinAble)(Kshatriya.TurnSigR.value)(Data_Maybe.Just.create(new Data_Either.Left(Kshatriya.TurnR.value)))();
             listen$prime(Kshatriya.wheelSigGPIOPinAble)(Kshatriya.loGPIOPinAble)(Kshatriya.WheelSig.value)(Data_Maybe.Nothing.value)();
-            listen$prime(Kshatriya.hornSigGPIOPinAble)(Kshatriya.hornGPIOPinAble)(Kshatriya.HornSig.value)(Data_Maybe.Just.create(new Data_Either.Left(Kshatriya.Horn.value)))();
-            GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))(f)();
-            var v1 = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
-            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1)();
-            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1)();
-            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.frontEABSGPIOPinAble)(Kshatriya.FrontEABS.value))(v1)();
-            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.backEABSGPIOPinAble)(Kshatriya.BackEABS.value))(v1)();
-            f(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSig.value))();
+            GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigL.value))(f)();
+            GPIO.listen(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigR.value))(f)();
+            var v1 = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigL.value))();
+            var v2 = GPIO.read(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigR.value))();
+            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeL.value))(v1 || v2)();
+            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeR.value))(v1 || v2)();
+            GPIO.openWrite(Kshatriya.toGPIOPin(Kshatriya.brakeGPIOPinAble)(Kshatriya.BrakeBoth.value))(v1 || v2)();
+            f(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigL.value))();
+            f(Kshatriya.toGPIOPin(Kshatriya.brakeSigGPIOPinAble)(Kshatriya.BrakeSigR.value))();
             Control_Monad_Eff_Console.log("GPIO Pins Ready")();
             return Control_Monad_Eff_Console.log("Kshatriya Ready")();
         };
